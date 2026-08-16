@@ -1,0 +1,26 @@
+scene.js
+  s_e69b4fba5e858f::t_e7f40d6a5cd960 78-80
+  s_e69b4fba5e858f::t_c6ce6078fbb8d5 73-77
+  s_e69b4fba5e858f::t_433d8f2c7160a4 7
+  s_e69b4fba5e858f::t_574be9633c1d6e 114,119,124
+daylight.test.js
+  s_e69b4fba5e858f::t_988025afeea1bb 1-13
+daylight.js
+  s_e69b4fba5e858f::t_c7708a445e54e5 1-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ee014ccb3149b5ff6c1b5b427ac3a00a9d1bdc5f",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
