@@ -1,0 +1,24 @@
+controls.js
+  s_e69b4fba5e858f::t_1b57cabce626cb 1-45
+controls.test.js
+  s_e69b4fba5e858f::t_e1ac219ed670ec 1-12
+scene.js
+  s_e69b4fba5e858f::t_c3bcafcb926a4b 101-106
+  s_e69b4fba5e858f::t_d9bed82989ce55 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "6d5fe38895d3391a621f122e26e7d30421f77a1e",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
