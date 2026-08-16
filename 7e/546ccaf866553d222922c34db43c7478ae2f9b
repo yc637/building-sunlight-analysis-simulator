@@ -1,0 +1,34 @@
+index.html
+  s_e69b4fba5e858f::t_0c54e68c98ce0f 44-46
+  s_e69b4fba5e858f::t_6f5784afeb5c5a 16-17
+  s_e69b4fba5e858f::t_7197abdb989d2f 28
+viewport.test.js
+  s_e69b4fba5e858f::t_224d240793b90d 66-92
+  s_e69b4fba5e858f::t_48e2f3d083b404 5
+scene.js
+  s_e69b4fba5e858f::t_02044108493bfa 100-129,132
+  s_e69b4fba5e858f::t_5af70f151cad71 9,16
+  s_e69b4fba5e858f::t_d15ff7a313c6a9 170-176,179-180
+editor2d.js
+  s_e69b4fba5e858f::t_6e03529b4d5bad 19-20
+  s_e69b4fba5e858f::t_506c58abe59131 106,108-115
+  s_e69b4fba5e858f::t_91daebd550342a 2
+viewport.js
+  s_e69b4fba5e858f::t_380db6b6a9c67d 51-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "7e546ccaf866553d222922c34db43c7478ae2f9b",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
