@@ -1,0 +1,21 @@
+scene.js
+  s_e69b4fba5e858f::t_bec13cdc8e31ed 57,59-60
+geometry.js
+  s_e69b4fba5e858f::t_9283e75293467b 16-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "f7d786c6f15d81165aace19c19f463ca420b0a2a",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
