@@ -1,0 +1,25 @@
+scene.js
+  s_e69b4fba5e858f::t_a5195b38587fe6 1-78
+index.html
+  s_e69b4fba5e858f::t_ca6d7c004e0808 1-36
+vendor/OrbitControls.js
+  s_e69b4fba5e858f::t_79c5a0869e858e 1-1417
+vendor/three.module.js
+  s_e69b4fba5e858f::t_f77ff4c8469818 1-53044
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1906fde6abbb50fbbf2f32287ecce7a90d7d6711",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
