@@ -1,0 +1,19 @@
+editor2d.js
+  s_e69b4fba5e858f::t_29ec35ca7f942f 77-80,82,87,90,93,98,101,106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "b7ef08c42a1016f4ba35d5e02684d520a9d638f4",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
