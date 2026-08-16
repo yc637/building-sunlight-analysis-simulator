@@ -1,0 +1,22 @@
+solar.js
+  s_e69b4fba5e858f::t_3d23a036e8f2dc 14-59
+solar.test.js
+  s_e69b4fba5e858f::t_8fd829670bc9f1 3
+  s_e69b4fba5e858f::t_19dec7e3bc0943 25-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "d15889d683ef02ac7aef7e9ae3afebc681b99699",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
