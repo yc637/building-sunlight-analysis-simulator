@@ -1,0 +1,21 @@
+viewport.test.js
+  s_e69b4fba5e858f::t_6ec6dcec9d4730 1-59
+viewport.js
+  s_e69b4fba5e858f::t_768c28201ab3b5 1-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "5d98bc52168aedece27f9befa6d915e28f81de71",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
