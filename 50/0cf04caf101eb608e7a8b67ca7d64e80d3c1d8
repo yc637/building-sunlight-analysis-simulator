@@ -1,0 +1,24 @@
+editor2d.js
+  s_e69b4fba5e858f::t_3eb40fcfd78494 1-105
+index.html
+  s_e69b4fba5e858f::t_25855820b993e2 30-34
+scene.js
+  s_e69b4fba5e858f::t_c2b4c6a1e0f009 91-94,96-97
+  s_e69b4fba5e858f::t_8a9011519580cb 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "500cf04caf101eb608e7a8b67ca7d64e80d3c1d8",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
