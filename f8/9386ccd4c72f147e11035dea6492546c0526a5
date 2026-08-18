@@ -1,0 +1,40 @@
+bundle.js
+  s_e69b4fba5e858f::t_9938f67a836533 31698,31773-31788,31968-31973,31987,31993-31994,32006-32010,32016-32017,32025-32033,32047-32054,32092-32093,32699-32704,32707,32711-32715
+  s_e69b4fba5e858f::t_02d42d80cebd27 31716,31930-31944,31953,31995-31996,32011-32015,32042-32046,32068-32074,32094-32095,32139-32164
+viewport.test.js
+  s_e69b4fba5e858f::t_f3b5ec3c2c526e 90-98
+  s_e69b4fba5e858f::t_c7ab5a04b3e366 7
+scene.js
+  s_e69b4fba5e858f::t_dbabe575bdb99e 247-255
+editor2d.js
+  s_e69b4fba5e858f::t_474ce9a3059bc2 35
+  s_e69b4fba5e858f::t_66557a54b94b8f 341-346
+  s_e69b4fba5e858f::t_82fbf1b56e39b4 293-294,302-308,324-332,347-355
+  s_e69b4fba5e858f::t_48995308b37318 272-278,287
+  s_e69b4fba5e858f::t_99cab27e7e7fa1 18
+  s_e69b4fba5e858f::t_c47667711bfee7 367-374,381
+  s_e69b4fba5e858f::t_645c2407c3747c 295-296,309-315
+  s_e69b4fba5e858f::t_66d673991d0701 90-110
+  s_e69b4fba5e858f::t_6a3fd6673d1a0c 425-446
+  s_e69b4fba5e858f::t_480386b6b35705 233-245,254
+index.html
+  s_e69b4fba5e858f::t_1dc182f6e9a58c 118
+viewport.js
+  s_e69b4fba5e858f::t_73c5491c6f7e09 99-108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "f89386ccd4c72f147e11035dea6492546c0526a5",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
