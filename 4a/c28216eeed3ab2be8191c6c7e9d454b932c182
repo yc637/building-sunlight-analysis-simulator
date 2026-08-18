@@ -1,0 +1,23 @@
+build.sh
+  s_e69b4fba5e858f::t_5c2c29f0235ad4 1-5
+bundle.js
+  s_e69b4fba5e858f::t_d922aefe6ab661 1-32696
+index.html
+  s_e69b4fba5e858f::t_53025d48cbb5e8 124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "4ac28216eeed3ab2be8191c6c7e9d454b932c182",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
