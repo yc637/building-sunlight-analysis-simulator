@@ -1,0 +1,21 @@
+editor2d.js
+  s_e69b4fba5e858f::t_0d3bc819f00806 45-49
+bundle.js
+  s_e69b4fba5e858f::t_af49d57b7c46f5 31736-31740
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "af60093488acf899fffd005bc0f8eefde379e43b",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
