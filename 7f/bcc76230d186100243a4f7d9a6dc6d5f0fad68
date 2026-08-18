@@ -1,0 +1,25 @@
+bundle.js
+  s_e69b4fba5e858f::t_deb202afd62768 32575-32576
+  s_e69b4fba5e858f::t_0ceb5e73aac5a1 32081-32085,32124-32127
+controls.js
+  s_e69b4fba5e858f::t_35b4ea464a4976 19-23
+  s_e69b4fba5e858f::t_ef9204e301349a 44-47
+scene.js
+  s_e69b4fba5e858f::t_4dbb3dfe5e14b2 343,348-349
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "7fbcc76230d186100243a4f7d9a6dc6d5f0fad68",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
