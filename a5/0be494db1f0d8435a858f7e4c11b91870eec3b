@@ -1,0 +1,31 @@
+controls.js
+  s_e69b4fba5e858f::t_72c579e8365c3b 55,61
+scene.js
+  s_e69b4fba5e858f::t_053300fc1a63be 329-338
+index.html
+  s_e69b4fba5e858f::t_dfbb861feace27 53
+  s_e69b4fba5e858f::t_d654e6c1c1b710 45
+  s_e69b4fba5e858f::t_afdf33385de718 56
+editor2d.js
+  s_e69b4fba5e858f::t_7ab62311e75a3e 195-198
+bundle.js
+  s_e69b4fba5e858f::t_7027111816596a 32105
+  s_e69b4fba5e858f::t_6ec03f166ed961 32532-32540
+  s_e69b4fba5e858f::t_4f1e3c924d216d 31799-31802
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a50be494db1f0d8435a858f7e4c11b91870eec3b",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
