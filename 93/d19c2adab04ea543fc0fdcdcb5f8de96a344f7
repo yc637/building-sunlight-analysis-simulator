@@ -1,0 +1,39 @@
+index.html
+  s_e69b4fba5e858f::t_a574f23490f9a4 63
+bundle.js
+  s_e69b4fba5e858f::t_c73e96a0726ce8 31482-31492,31527-31604,31792-31794,31797,31872,31885-31893,32034,32039-32043,32050,32057-32066,32095-32104,32168,32400,32408-32414,32420-32431
+editor2d.js
+  s_e69b4fba5e858f::t_a7cf7236ea8130 309,312-316,320,328-337
+  s_e69b4fba5e858f::t_8164002f19adb0 3
+  s_e69b4fba5e858f::t_7984063f2ffba7 84-86,90
+  s_e69b4fba5e858f::t_a3005c4121ba55 338,369-379
+  s_e69b4fba5e858f::t_275d18d27f5599 426
+  s_e69b4fba5e858f::t_6b38f2ac400d9b 163,168,173-179
+viewport.js
+  s_e69b4fba5e858f::t_5f27d29ab792f2 121-133
+geometry.js
+  s_e69b4fba5e858f::t_29d39e7fc64bc8 17,19
+  s_e69b4fba5e858f::t_cebc46777d2447 46
+  s_e69b4fba5e858f::t_ca2a0061d60cc3 1-2
+controls.js
+  s_e69b4fba5e858f::t_4cf3ef7099e10c 43,46-50,52-54
+viewport.test.js
+  s_e69b4fba5e858f::t_8ad0b4f8c8de95 99-115
+  s_e69b4fba5e858f::t_2e764ef65fcd2b 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "93d19c2adab04ea543fc0fdcdcb5f8de96a344f7",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
