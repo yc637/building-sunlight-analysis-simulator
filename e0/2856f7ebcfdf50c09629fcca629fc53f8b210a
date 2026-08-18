@@ -1,0 +1,19 @@
+scene.js
+  s_e69b4fba5e858f::t_df7ef024542013 343-344,348-351
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e02856f7ebcfdf50c09629fcca629fc53f8b210a",
+  "prompts": {},
+  "sessions": {
+    "s_e69b4fba5e858f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7bbdd6cd-8889-4574-afff-58b1e01b4f21",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
