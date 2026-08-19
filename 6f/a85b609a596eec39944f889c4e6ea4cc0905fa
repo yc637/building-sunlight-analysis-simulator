@@ -1,0 +1,28 @@
+bundle.js
+  s_482eaa33a87939::t_15eab575a1cd9a 31676,31818-31822,31824,32205-32207,32376,32504-32508,32514,32522,32557
+homography.js
+  s_482eaa33a87939::t_e36b0cbc814597 76-77
+editor2d.js
+  s_482eaa33a87939::t_e9a24b208960ae 24
+  s_482eaa33a87939::t_2b69bd43132afd 623,629,636
+  s_482eaa33a87939::t_154b382c6a6b66 675
+  s_482eaa33a87939::t_79e30a1546104c 510
+  s_482eaa33a87939::t_9862e14d8e24f6 21-22
+  s_482eaa33a87939::t_59bd72109af71a 362
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "6fa85b609a596eec39944f889c4e6ea4cc0905fa",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
