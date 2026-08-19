@@ -1,0 +1,21 @@
+homography.test.js
+  s_482eaa33a87939::t_c182eca2763da8 1-62
+homography.js
+  s_482eaa33a87939::t_e7e60ffd14bf29 1-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "bafe3f710fd0b36695a5fcf73cafb9ac1de9e036",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
