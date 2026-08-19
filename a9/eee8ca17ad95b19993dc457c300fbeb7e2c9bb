@@ -1,0 +1,35 @@
+index.html
+  s_482eaa33a87939::t_a9656c4b96bba4 124
+homography.js
+  s_482eaa33a87939::t_93816cca182ac4 65-103
+editor2d.js
+  s_482eaa33a87939::t_3b6987b4a9182b 508-509
+  s_482eaa33a87939::t_25fec177f25b7b 268-281
+  s_482eaa33a87939::t_f026404419e883 360
+  s_482eaa33a87939::t_f2e25de14b38af 460-464
+  s_482eaa33a87939::t_cbdeb5146ab67c 4,6-7
+  s_482eaa33a87939::t_28c1d173c1f6be 299
+  s_482eaa33a87939::t_5ba2169714aaf8 596-638
+  s_482eaa33a87939::t_4f0c68838213bf 682
+  s_482eaa33a87939::t_ba46ba34287e97 19-20
+scene.js
+  s_482eaa33a87939::t_959fb55cfaba9b 262-266
+bundle.js
+  s_482eaa33a87939::t_860212d67db04d 31613-31702,31815-31816,32091-32109,32129,32196-32199,32296-32306,32365-32369,32472-32515,32556,33022-33029
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a9eee8ca17ad95b19993dc457c300fbeb7e2c9bb",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
