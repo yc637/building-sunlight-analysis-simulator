@@ -1,0 +1,49 @@
+.gitignore
+  s_482eaa33a87939::t_cca2b24fb5411b 1
+bundle.js
+  s_482eaa33a87939::t_c8c73fa02c6561 31901,31918
+  s_482eaa33a87939::t_a10bebf268d39b 32831
+  s_482eaa33a87939::t_b878d139f51267 31900,31906,32095-32099,32131,32179
+  s_482eaa33a87939::t_fc6703fdf8f9db 32792
+  s_482eaa33a87939::t_0be30aae8568da 31899,31902,31904,31907-31917,31919-31923
+  s_482eaa33a87939::t_bffe5264600b3e 31472-31479,31820-31825
+  s_482eaa33a87939::t_6e0eb63a1a9349 32793
+  s_482eaa33a87939::t_030c827a240b46 31995-31997
+  s_482eaa33a87939::t_0a72c9b4971764 32189
+  s_482eaa33a87939::t_6f732e0e36b1e8 31905
+scene.js
+  s_482eaa33a87939::t_7d65f56fdfb36d 222
+  s_482eaa33a87939::t_5136091a16d8bb 221
+  s_482eaa33a87939::t_d6f013508dfbf8 252-255
+editor2d.js
+  s_482eaa33a87939::t_2c84319e28d33c 260-261
+  s_482eaa33a87939::t_1795c0c81bfb73 444
+  s_482eaa33a87939::t_7904ecded2c93d 109-115
+  s_482eaa33a87939::t_44895ab17ed972 439-440
+  s_482eaa33a87939::t_b97057f6800b83 178,184-192,195-197
+  s_482eaa33a87939::t_a27a6af28eb1fa 2
+  s_482eaa33a87939::t_2742bc3ed66f7c 180-183,193-194,198
+  s_482eaa33a87939::t_093ace15191478 393
+  s_482eaa33a87939::t_ef7a7c266e0173 342,353-357
+  s_482eaa33a87939::t_06d437c21e120d 358
+docs/superpowers/plans/2026-08-19-perspective-rectification.md
+  s_482eaa33a87939::t_319eb2dc429067 1-462
+index.html
+  s_482eaa33a87939::t_206dcd944725b6 82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "0453dc91602564f449efbf636fa8c42d78a1373f",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
