@@ -1,0 +1,23 @@
+sunlight.test.js
+  s_482eaa33a87939::t_6d82de888a2956 108-157
+  s_482eaa33a87939::t_47bb1b9b0e97de 5
+sunlight.js
+  s_482eaa33a87939::t_d8347f1e47a030 5-70
+  s_482eaa33a87939::t_b20a307cddcb43 2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c577d1fd64a600a2e7130a53715a469b255e85d4",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
