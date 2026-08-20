@@ -1,0 +1,21 @@
+docs/superpowers/specs/2026-08-20-sunlight-hours-analysis-design.md
+  s_482eaa33a87939::t_bc848cc4d4e265 1-90,92,94-95,97-99,101-111,115-207
+  s_482eaa33a87939::t_bd46a288ba281f 112-114
+  s_482eaa33a87939::t_12ffdb75bb3ffd 91,93,96,100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c280fdf00b64c343f1c6019f43356624dc46f415",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
