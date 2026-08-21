@@ -1,0 +1,25 @@
+scene.js
+  s_482eaa33a87939::t_991386a9a991f5 788-794
+bundle.js
+  s_482eaa33a87939::t_acaf5a6251d093 31823,31843-31850,31876,31878,31881-31886,31888-31891,31915,31920-31927,33991,33994-34003
+modal.js
+  s_482eaa33a87939::t_e232024614f7dc 63,75-77
+  s_482eaa33a87939::t_57ac232c95a8d8 98-102
+  s_482eaa33a87939::t_171bf93cbbff01 123,126-127
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "554f4646047c066f15918b9eb133e87dd81ced38",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
