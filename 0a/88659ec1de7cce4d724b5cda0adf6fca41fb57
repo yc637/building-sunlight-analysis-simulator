@@ -1,0 +1,21 @@
+README.md
+  s_482eaa33a87939::t_45b3486eea1dcb 31
+README.zh-CN.md
+  s_482eaa33a87939::t_8d4f97932e66ec 31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "0a88659ec1de7cce4d724b5cda0adf6fca41fb57",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
