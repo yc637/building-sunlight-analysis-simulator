@@ -1,0 +1,23 @@
+LICENSE
+  s_482eaa33a87939::t_b0e425d869aadd 1-21
+README.md
+  s_482eaa33a87939::t_3a111a6edfb757 38
+  s_482eaa33a87939::t_40843b5c70c44e 80
+  s_482eaa33a87939::t_828fd94edf8631 1-37,39-79,81-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "716dbd92bd510676bcc297a5f20d5e4567dbcf00",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
