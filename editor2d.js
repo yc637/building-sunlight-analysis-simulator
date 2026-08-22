@@ -371,10 +371,10 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
     ctx.save();
     ctx.fillStyle = '#c62828'; ctx.font = 'bold 12px sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('北', w / 2, 18);
-    ctx.fillText('南', w / 2, h - 28);
-    ctx.fillText('东', w - 16, h / 2);
-    ctx.fillText('西', 16, h / 2);
+    ctx.fillText(t('dir.n'), w / 2, 18);
+    ctx.fillText(t('dir.s'), w / 2, h - 28);
+    ctx.fillText(t('dir.e'), w - 16, h / 2);
+    ctx.fillText(t('dir.w'), 16, h / 2);
     ctx.restore();
   }
 

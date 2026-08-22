@@ -281,11 +281,11 @@ function drawCompass3d() {
   cctx.strokeStyle = '#888';
   cctx.beginPath(); cctx.moveTo(cx, cy); cctx.lineTo(cx - nx * r, cy - ny * r); cctx.stroke();
   cctx.font = 'bold 12px sans-serif'; cctx.textAlign = 'center'; cctx.textBaseline = 'middle';
-  cctx.fillStyle = '#c62828'; cctx.fillText('北', cx + nx * r * 0.8, cy + ny * r * 0.8);
+  cctx.fillStyle = '#c62828'; cctx.fillText(t('dir.n'), cx + nx * r * 0.8, cy + ny * r * 0.8);
   cctx.fillStyle = '#555';
-  cctx.fillText('南', cx - nx * r * 0.8, cy - ny * r * 0.8);
-  cctx.fillText('东', cx + ex * r * 0.8, cy + ey * r * 0.8);
-  cctx.fillText('西', cx - ex * r * 0.8, cy - ey * r * 0.8);
+  cctx.fillText(t('dir.s'), cx - nx * r * 0.8, cy - ny * r * 0.8);
+  cctx.fillText(t('dir.e'), cx + ex * r * 0.8, cy + ey * r * 0.8);
+  cctx.fillText(t('dir.w'), cx - ex * r * 0.8, cy - ey * r * 0.8);
 }
 
 let lastBgRef = null;
@@ -305,7 +305,7 @@ function loop() {
     const slider = document.getElementById('c-time');
     if (slider) { slider.value = state.time; }
     const label = document.getElementById('c-time-l');
-    if (label) label.textContent = '时间 ' + state.time.toFixed(1) + 'h';
+    if (label) label.textContent = t('ctl.time') + ' ' + state.time.toFixed(1) + 'h';
     updateSun();
     onFloorsDirty();
   }
@@ -876,12 +876,13 @@ function showProgress() {
     ov.style.cssText = 'position:fixed;inset:0;z-index:200;background:rgba(42,45,51,.4);display:flex;align-items:center;justify-content:center;';
     ov.innerHTML =
       '<div style="background:#fff;border-radius:10px;padding:20px 24px;min-width:280px;box-shadow:0 8px 30px rgba(0,0,0,.25);font:13px sans-serif;color:#2a2d33;text-align:center">' +
-      '<div style="margin-bottom:12px;font-weight:600">' + t('analysis.computing') + '</div>' +
+      '<div id="sun-progress-title" style="margin-bottom:12px;font-weight:600"></div>' +
       '<div style="height:10px;background:#eee;border-radius:5px;overflow:hidden">' +
       '<div id="sun-progress" style="height:100%;width:0;background:#2b5f8a;transition:width .12s"></div></div>' +
       '<div id="sun-progress-pct" style="margin-top:8px;color:#8a909b">0%</div></div>';
     document.body.appendChild(ov);
   }
+  document.getElementById('sun-progress-title').textContent = t('analysis.computing'); // 每次按当前语言
   ov.style.display = 'flex';
   setProgress(0);
 }

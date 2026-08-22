@@ -31783,7 +31783,11 @@
       export: "\u5BFC\u51FA",
       import: "\u5BFC\u5165",
       "plan.title": "2D \u7F16\u8F91\u5668",
-      "plan.hint": "\u70B9\u51FB\u52A0\u70B9 \xB7 \u56DE\u8F66/\u53F3\u952E\u5B8C\u6210 \xB7 \u957F\u6309\u53F3\u952E\u62D6\u62FD \xB7 \u9000\u683C\u64A4\u9500",
+      "plan.hint": "\u70B9\u51FB\u52A0\u70B9 \xB7 \u56DE\u8F66\u5B8C\u6210 \xB7 \u53F3\u952E\u62D6\u62FD",
+      "dir.n": "\u5317",
+      "dir.s": "\u5357",
+      "dir.e": "\u4E1C",
+      "dir.w": "\u897F",
       "plan.fullscreen": "\u5168\u5C4F",
       "plan.restore": "\u8FD8\u539F",
       "sec.bounds": "\u573A\u666F\u8303\u56F4",
@@ -31884,7 +31888,11 @@
       export: "Export",
       import: "Import",
       "plan.title": "2D Editor",
-      "plan.hint": "Click to add \xB7 Enter/right-click to finish \xB7 hold right-drag to pan \xB7 Backspace to undo",
+      "plan.hint": "Click: add \xB7 Enter: finish \xB7 right-drag: pan",
+      "dir.n": "N",
+      "dir.s": "S",
+      "dir.e": "E",
+      "dir.w": "W",
       "plan.fullscreen": "Fullscreen",
       "plan.restore": "Restore",
       "sec.bounds": "Scene bounds",
@@ -32583,10 +32591,10 @@
       ctx.font = "bold 12px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("\u5317", w / 2, 18);
-      ctx.fillText("\u5357", w / 2, h - 28);
-      ctx.fillText("\u4E1C", w - 16, h / 2);
-      ctx.fillText("\u897F", 16, h / 2);
+      ctx.fillText(t("dir.n"), w / 2, 18);
+      ctx.fillText(t("dir.s"), w / 2, h - 28);
+      ctx.fillText(t("dir.e"), w - 16, h / 2);
+      ctx.fillText(t("dir.w"), 16, h / 2);
       ctx.restore();
     }
     function drawLabel(step) {
@@ -33187,7 +33195,7 @@
         <button id="c-equinox" style="flex:1;min-width:0;padding:4px 2px;font-size:11px;white-space:nowrap;height:26px">${t("ctl.equinox")}</button>
         <button id="c-summer" style="flex:1;min-width:0;padding:4px 2px;font-size:11px;white-space:nowrap;height:26px">${t("ctl.summer")}</button>
       </div>
-      <div class="row"><label id="c-time-l">${t("ctl.time")} ${state2.time}h</label>
+      <div class="row"><label id="c-time-l">${t("ctl.time")} ${fmt(state2.time)}h</label>
         <button class="nudge" data-t="c-time" data-d="-0.1" style="padding:2px 6px">\u2212</button>
         <input id="c-time" type="range" min="0" max="24" step="0.1" value="${state2.time}">
         <button class="nudge" data-t="c-time" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
@@ -33812,11 +33820,11 @@
     cctx.textAlign = "center";
     cctx.textBaseline = "middle";
     cctx.fillStyle = "#c62828";
-    cctx.fillText("\u5317", cx + nx * r * 0.8, cy + ny * r * 0.8);
+    cctx.fillText(t("dir.n"), cx + nx * r * 0.8, cy + ny * r * 0.8);
     cctx.fillStyle = "#555";
-    cctx.fillText("\u5357", cx - nx * r * 0.8, cy - ny * r * 0.8);
-    cctx.fillText("\u4E1C", cx + ex * r * 0.8, cy + ey * r * 0.8);
-    cctx.fillText("\u897F", cx - ex * r * 0.8, cy - ey * r * 0.8);
+    cctx.fillText(t("dir.s"), cx - nx * r * 0.8, cy - ny * r * 0.8);
+    cctx.fillText(t("dir.e"), cx + ex * r * 0.8, cy + ey * r * 0.8);
+    cctx.fillText(t("dir.w"), cx - ex * r * 0.8, cy - ey * r * 0.8);
   }
   var lastBgRef = null;
   function loop() {
@@ -33838,7 +33846,7 @@
         slider.value = state.time;
       }
       const label = document.getElementById("c-time-l");
-      if (label) label.textContent = "\u65F6\u95F4 " + state.time.toFixed(1) + "h";
+      if (label) label.textContent = t("ctl.time") + " " + state.time.toFixed(1) + "h";
       updateSun();
       onFloorsDirty();
     }
@@ -34437,9 +34445,10 @@
       ov = document.createElement("div");
       ov.id = "sun-overlay";
       ov.style.cssText = "position:fixed;inset:0;z-index:200;background:rgba(42,45,51,.4);display:flex;align-items:center;justify-content:center;";
-      ov.innerHTML = '<div style="background:#fff;border-radius:10px;padding:20px 24px;min-width:280px;box-shadow:0 8px 30px rgba(0,0,0,.25);font:13px sans-serif;color:#2a2d33;text-align:center"><div style="margin-bottom:12px;font-weight:600">' + t("analysis.computing") + '</div><div style="height:10px;background:#eee;border-radius:5px;overflow:hidden"><div id="sun-progress" style="height:100%;width:0;background:#2b5f8a;transition:width .12s"></div></div><div id="sun-progress-pct" style="margin-top:8px;color:#8a909b">0%</div></div>';
+      ov.innerHTML = '<div style="background:#fff;border-radius:10px;padding:20px 24px;min-width:280px;box-shadow:0 8px 30px rgba(0,0,0,.25);font:13px sans-serif;color:#2a2d33;text-align:center"><div id="sun-progress-title" style="margin-bottom:12px;font-weight:600"></div><div style="height:10px;background:#eee;border-radius:5px;overflow:hidden"><div id="sun-progress" style="height:100%;width:0;background:#2b5f8a;transition:width .12s"></div></div><div id="sun-progress-pct" style="margin-top:8px;color:#8a909b">0%</div></div>';
       document.body.appendChild(ov);
     }
+    document.getElementById("sun-progress-title").textContent = t("analysis.computing");
     ov.style.display = "flex";
     setProgress(0);
   }
