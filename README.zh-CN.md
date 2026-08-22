@@ -28,11 +28,7 @@
 
 ## 在线体验
 
-部署到 GitHub Pages 后访问：
-
-```
-https://<你的用户名>.github.io/building-sunlight-analysis-simulator/
-```
+**https://yc637.github.io/building-sunlight-analysis-simulator/**
 
 ---
 

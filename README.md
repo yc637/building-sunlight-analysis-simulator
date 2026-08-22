@@ -28,11 +28,7 @@ Keywords: daylight, sunlight, insolation, sun study, building, house, shadow ana
 
 ## Live Demo
 
-After deploying to GitHub Pages:
-
-```
-https://<your-username>.github.io/building-sunlight-analysis-simulator/
-```
+**https://yc637.github.io/building-sunlight-analysis-simulator/**
 
 ---
 
