@@ -61,7 +61,7 @@ const DICT = {
     'analysis.needBuilding': 'Draw a building first', 'analysis.noFace': 'No facade selected (click a building facade in 3D)',
     'analysis.pass': (p, t) => `${p}/${t} floors pass`,
     'ctl.lat': 'Lat', 'ctl.lon': 'Lon', 'ctl.date': 'Date', 'ctl.time': 'Time',
-    'ctl.winter': 'Winter sol.', 'ctl.equinox': 'Equinox', 'ctl.summer': 'Summer sol.',
+    'ctl.winter': 'Winter', 'ctl.equinox': 'Equinox', 'ctl.summer': 'Summer',
     'ctl.play': '▶ Play', 'ctl.pause': '⏸ Pause', 'ctl.speed': 'Playback speed',
     'list.buildings': 'Buildings', 'list.walls': 'Walls', 'list.fh': 'Fl.H', 'list.fc': 'Floors',
     'list.h': 'H', 'list.t': 'T', 'list.del': 'Del',

@@ -31905,9 +31905,9 @@
       "ctl.lon": "Lon",
       "ctl.date": "Date",
       "ctl.time": "Time",
-      "ctl.winter": "Winter sol.",
+      "ctl.winter": "Winter",
       "ctl.equinox": "Equinox",
-      "ctl.summer": "Summer sol.",
+      "ctl.summer": "Summer",
       "ctl.play": "\u25B6 Play",
       "ctl.pause": "\u23F8 Pause",
       "ctl.speed": "Playback speed",
@@ -33186,11 +33186,13 @@
         <button class="nudge" data-t="c-time" data-d="-0.1" style="padding:2px 6px">\u2212</button>
         <input id="c-time" type="range" min="0" max="24" step="0.1" value="${state2.time}">
         <button class="nudge" data-t="c-time" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
-      <div class="row" style="gap:3px">
-        <button id="c-winter" style="padding:4px 6px">${t("ctl.winter")}</button>
-        <button id="c-equinox" style="padding:4px 6px">${t("ctl.equinox")}</button>
-        <button id="c-summer" style="padding:4px 6px">${t("ctl.summer")}</button>
-        <select id="c-speed" style="margin-left:auto;padding:3px 4px" title="${t("ctl.speed")}">
+      <div class="row" style="gap:4px;align-items:stretch">
+        <button id="c-winter" style="flex:1;min-width:0;padding:4px 2px;font-size:11px;white-space:nowrap;height:26px">${t("ctl.winter")}</button>
+        <button id="c-equinox" style="flex:1;min-width:0;padding:4px 2px;font-size:11px;white-space:nowrap;height:26px">${t("ctl.equinox")}</button>
+        <button id="c-summer" style="flex:1;min-width:0;padding:4px 2px;font-size:11px;white-space:nowrap;height:26px">${t("ctl.summer")}</button>
+      </div>
+      <div class="row" style="gap:4px;align-items:stretch">
+        <select id="c-speed" style="flex:1;min-width:0;padding:3px 4px;height:26px" title="${t("ctl.speed")}">
           <option value="0.1">0.1\xD7</option>
           <option value="0.5">0.5\xD7</option>
           <option value="1">1\xD7</option>
@@ -33198,7 +33200,7 @@
           <option value="4">4\xD7</option>
           <option value="8">8\xD7</option>
         </select>
-        <button id="c-play" style="padding:4px 8px">${state2.playing ? t("ctl.pause") : t("ctl.play")}</button>
+        <button id="c-play" style="flex:1;min-width:0;padding:4px 8px;white-space:nowrap;height:26px">${state2.playing ? t("ctl.pause") : t("ctl.play")}</button>
       </div>
     `;
       $("#c-speed").value = String(state2.playSpeed || 1);
