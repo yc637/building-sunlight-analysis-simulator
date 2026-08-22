@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>楼房采光模拟</title>
+  <style>
+    :root {
+      --paper: #faf9f6;
+      --surface: #ffffff;
+      --ink: #2a2d33;
+      --muted: #8a909b;
+      --line: #e6e4de;
+      --accent: #2b5f8a;
+      --accent-soft: #e8eff4;
+      --sun: #d97706;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden;
+                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+                 background: var(--paper); color: var(--ink); }
+    #app { display: flex; flex-direction: column; height: 100%; }
+
+    /* 顶部工具条 */
+    #topbar { display: flex; align-items: center; gap: 4px; padding: 6px 10px;
+              background: var(--surface); border-bottom: 1px solid var(--line); flex: 0 0 auto; }
+    #topbar .title { font-weight: 600; font-size: 13px; margin-right: 12px; }
+    #topbar .group { display: flex; gap: 4px; align-items: center; }
+    #topbar .sep { width: 1px; height: 18px; background: var(--line); margin: 0 8px; }
+    #topbar button { font-size: 12px; padding: 5px 10px; border: 1px solid var(--line);
+                     background: var(--surface); color: var(--ink); border-radius: 5px; cursor: pointer; }
+    #topbar button:hover { border-color: var(--muted); }
+    #topbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* 中间主体 */
+    #main { display: flex; flex: 1; min-height: 0; }
+
+    /* 3D 视图 */
+    #view3d { flex: 1; position: relative; background: var(--paper); min-width: 0; }
+    canvas#view { display: block; width: 100%; height: 100%; }
+    #compass3d { position: absolute; top: 12px; left: 12px; pointer-events: none;
+                 background: rgba(255,255,255,0.7); border-radius: 50%; }
+
+    /* 右侧面板 */
+    #panel { width: 320px; flex: 0 0 auto; padding: 10px 12px; overflow-y: auto;
+             background: var(--surface); border-left: 1px solid var(--line); font-size: 12px; }
+    #panel section { margin-bottom: 10px; border: 1px solid var(--line); border-radius: 6px;
+                     background: #fbfaf7; overflow: hidden; padding: 0 8px 8px; }
+    #panel .sec-title { font-size: 12px; font-weight: 600; color: var(--ink);
+                        background: var(--accent-soft); padding: 7px 10px;
+                        border-bottom: 1px solid var(--line); margin: 0 -8px 8px; }
+    /* 可折叠分区：sec-title 前加三角，折叠时隐藏内容 */
+    #panel section.collapsible > .sec-title { cursor: pointer; user-select: none; }
+    #panel section.collapsible > .sec-title::before { content: '▾ '; font-size: 10px; color: var(--muted); }
+    #panel section.collapsible.collapsed > .sec-title { margin-bottom: 0; border-bottom: none; }
+    #panel section.collapsible.collapsed > .sec-title::before { content: '▸ '; }
+    #panel section.collapsible.collapsed > :not(.sec-title) { display: none; }
+    .row { margin: 5px 0; display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+    .row label { flex: 0 0 92px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .row input, .row select { flex: 1; font-size: 12px; padding: 4px 6px; border: 1px solid var(--line);
+                              border-radius: 4px; background: #fff; color: var(--ink); min-width: 0; }
+    .row input[type="range"] { padding: 0; min-width: 110px; }
+    #panel textarea { display: block; width: 100%; box-sizing: border-box; font: 11px/1.4 ui-monospace, "SF Mono", Menlo, monospace;
+                      border: 1px solid var(--line); border-radius: 4px; padding: 6px; background: #fff; }
+    #panel button { font-size: 12px; padding: 5px 8px; border: 1px solid var(--line);
+                    background: #fff; color: var(--ink); border-radius: 4px; cursor: pointer; }
+    #panel button:hover { border-color: var(--muted); }
+    #panel button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    #panel button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    #lists .bld-row { display: flex; align-items: center; gap: 5px; padding: 5px 6px;
+                      border: 1px solid var(--line); border-radius: 4px; margin: 4px 0; }
+    #lists .bld-row .name { font-weight: 600; flex: 0 0 auto; min-width: 40px; }
+    #lists .bld-row input { width: 44px; font-size: 11px; padding: 2px 4px; border: 1px solid var(--line); border-radius: 3px; }
+    #lists .bld-row .del { color: #b3261e; cursor: pointer; border: none; background: none; padding: 2px 4px; font-size: 11px; }
+    #lists .h4 { font-size: 11px; color: var(--muted); margin: 6px 0 2px; }
+
+    /* 2D 编辑器浮动面板 */
+    #plan2d-wrap { position: absolute; top: 12px; right: 12px; width: 560px; height: 420px;
+                   background: var(--surface); border: 1px solid var(--line); box-shadow: 0 4px 20px rgba(42,45,51,0.12);
+                   display: flex; flex-direction: column; z-index: 6; border-radius: 8px; overflow: hidden; }
+    #plan2d-head { display: flex; align-items: center; gap: 4px; padding: 5px 8px;
+                   background: #f4f3ef; cursor: move; border-bottom: 1px solid var(--line); font-size: 12px; }
+    #plan2d-head .t { font-weight: 600; margin-right: 6px; }
+    #plan2d-head button { cursor: pointer; font-size: 11px; padding: 3px 8px; border: 1px solid var(--line);
+                          background: #fff; border-radius: 4px; }
+    #plan2d-head button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    #plan2d-head .spacer { flex: 1; }
+    #plan2d { flex: 1; min-height: 0; width: 100%; display: block; background: #fff; cursor: crosshair; }
+    #plan2d-resize { position: absolute; right: 0; bottom: 0; width: 16px; height: 16px;
+                     cursor: nwse-resize; background: linear-gradient(135deg, transparent 50%, #b9b6ad 50%); }
+    .plan2d-edge { position: absolute; z-index: 3; }
+    #plan2d-edge-t { top: 0; left: 8px; right: 8px; height: 6px; cursor: ns-resize; }
+    #plan2d-edge-b { bottom: 0; left: 8px; right: 8px; height: 6px; cursor: ns-resize; }
+    #plan2d-edge-l { left: 0; top: 8px; bottom: 8px; width: 6px; cursor: ew-resize; }
+    #plan2d-edge-r { right: 0; top: 8px; bottom: 8px; width: 6px; cursor: ew-resize; }
+    #plan2d-wrap.fullscreen { top: 0; left: 0; right: 0; bottom: 0; width: auto; height: auto; z-index: 20; border-radius: 0; }
+    #plan2d-wrap.minimized { width: auto; height: auto !important; top: 12px; right: 12px; bottom: auto; left: auto;
+                             box-shadow: none; background: transparent; border: none; overflow: hidden; border-radius: 0; }
+    #plan2d-wrap.minimized #plan2d { display: none !important; }
+    #plan2d-wrap.minimized #plan2d-head { background: transparent; border: none; padding: 0; }
+    #plan2d-wrap.minimized #plan2d-head > *:not(#minimize-plan) { display: none; }
+    #plan2d-wrap.minimized #plan2d, #plan2d-wrap.minimized #plan2d-resize,
+    #plan2d-wrap.minimized .plan2d-edge,
+    #plan2d-wrap.minimized #bld-settings { display: none; }
+    /* 最小化后的悬浮按钮：显眼、固定右上角 */
+    #plan2d-wrap.minimized #minimize-plan {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px; font-size: 12px; font-weight: 600;
+      background: var(--accent); color: #fff; border: none; border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(42,45,51,0.25); cursor: pointer;
+    }
+    #plan2d-wrap.minimized #minimize-plan::before { content: '▦'; font-size: 13px; }
+
+    input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部工具条 -->
+    <div id="topbar">
+      <span class="title">采光模拟</span>
+      <div class="group">
+        <button id="mode-building" class="active">画楼</button>
+        <button id="mode-wall">画围墙</button>
+        <button id="mode-drag">拖拽</button>
+      </div>
+      <span class="sep"></span>
+      <div class="group">
+        <button id="load-bg">底图</button>
+        <button id="calibrate-bg">校正</button>
+        <button id="bg-dec">−</button>
+        <input id="bg-scale" type="range" min="0" max="200" step="0.1" value="100" style="width:110px">
+        <button id="bg-inc">＋</button>
+        <button id="bg-lock">🔒 锁底图</button>
+        <button id="bg-del">删除底图</button>
+      </div>
+      <span class="sep"></span>
+      <div class="group">
+        <button id="reset-view">复位视图</button>
+      </div>
+      <div class="group" style="margin-left:auto">
+        <button id="help-btn">📖 说明</button>
+        <button id="save-local">保存</button>
+        <button id="export-file">导出</button>
+        <button id="import-file">导入</button>
+        <input id="import-input" type="file" accept=".json,application/json">
+      </div>
+    </div>
+
+    <!-- 主体 -->
+    <div id="main">
+      <div id="view3d">
+        <canvas id="view"></canvas>
+        <canvas id="compass3d" width="80" height="80"></canvas>
+
+        <!-- 2D 编辑器浮动面板（相对 3D 视图定位） -->
+        <div id="plan2d-wrap">
+          <div id="plan2d-head">
+            <span class="t">2D 编辑器</span>
+            <span style="margin-left:auto;font-size:10px;color:var(--muted)">点击加点 · 回车/右键完成 · 长按右键拖拽 · 退格撤销</span>
+            <button id="fullscreen-plan">全屏</button>
+            <button id="minimize-plan">—</button>
+          </div>
+          <canvas id="plan2d" width="560" height="420"></canvas>
+          <div id="plan2d-edge-t" class="plan2d-edge"></div>
+          <div id="plan2d-edge-b" class="plan2d-edge"></div>
+          <div id="plan2d-edge-l" class="plan2d-edge"></div>
+          <div id="plan2d-edge-r" class="plan2d-edge"></div>
+          <div id="plan2d-resize"></div>
+          <input id="bg-file" type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- 右侧面板 -->
+      <div id="panel">
+        <section>
+          <div class="sec-title">场景范围</div>
+          <textarea id="geo-points" rows="4"
+            placeholder="每行一个点：纬度,经度&#10;39.9100, 116.3900&#10;39.9100, 116.4050&#10;39.9200, 116.4050"></textarea>
+          <div class="row"><button id="draw-geo" class="primary" style="width:100%">画范围（并设纬度）</button></div>
+        </section>
+        <section>
+          <div class="sec-title">太阳</div>
+          <div id="controls"></div>
+        </section>
+        <section>
+          <div class="sec-title">日照分析</div>
+          <div class="row" style="color:#8a909b;font-size:11px;line-height:1.5;display:block">
+            按「太阳」面板所选日期，统计真太阳时 8:00–16:00 各立面日照时数（达标线 2h）。<br>
+            3D 点击楼立面可增减分析面（默认南面）。
+          </div>
+          <div class="row" style="gap:6px">
+            <button id="run-sunlight" class="primary" style="flex:1">日照分析</button>
+            <button id="clear-sunlight" style="flex:0 0 auto">清除热力图</button>
+          </div>
+          <div id="sun-legend" style="margin-top:6px"></div>
+          <div id="sun-report" style="margin-top:6px;font-size:11px"></div>
+        </section>
+        <section id="sec-lists" class="collapsible collapsed">
+          <div class="sec-title" id="sec-lists-title">楼栋</div>
+          <div id="lists"></div>
+        </section>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="./bundle.js"></script>
+</body>
+</html>
