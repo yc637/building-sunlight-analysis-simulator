@@ -5,6 +5,7 @@ import {
 } from './viewport.js';
 import { solveHomography, applyHomography } from './homography.js';
 import { promptModal, alertModal, confirmModal } from './modal.js';
+import { t, onLangChange } from './i18n.js';
 
 export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} }) {
   const ctx = canvas.getContext('2d');
@@ -62,40 +63,40 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
     'padding:10px;font:12px sans-serif;display:none;z-index:5;border-radius:8px;width:200px;' +
     'box-shadow:0 6px 24px rgba(42,45,51,.18);color:#2a2d33;';
   selPanel.innerHTML = `
-    <div style="font-weight:600;font-size:13px;margin-bottom:8px">楼设置</div>
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px" data-i18n="bld.title">楼设置</div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">名称</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="bld.name">名称</label>
       <input id="bld-name" type="text" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px">
     </div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">层高</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="bld.fh">层高</label>
       <input id="bld-h" type="number" step="any" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px;min-width:0">
     </div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">层数</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="bld.fc">层数</label>
       <input id="bld-n" type="number" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px;min-width:0">
     </div>
     <div style="margin:8px 0 4px">
-      <div id="bld-floors-toggle" style="cursor:pointer;color:#2b5f8a;user-select:none">▸ 逐层层高</div>
+      <div id="bld-floors-toggle" style="cursor:pointer;color:#2b5f8a;user-select:none">▸ ${t('bld.perFloor')}</div>
       <div id="bld-floors" style="display:none;max-height:150px;overflow:auto;margin-top:4px"></div>
     </div>
     <div style="display:flex;gap:6px;margin-top:10px;justify-content:flex-end">
-      <button id="bld-del" style="padding:5px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#b3261e;cursor:pointer;font-size:12px">删除</button>
-      <button id="bld-close" style="padding:5px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px">取消选中</button>
+      <button id="bld-del" style="padding:5px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#b3261e;cursor:pointer;font-size:12px" data-i18n="bld.del">删除</button>
+      <button id="bld-close" style="padding:5px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px" data-i18n="bld.close">取消选中</button>
     </div>`;
   // 逐层层高展开切换
   selPanel.querySelector('#bld-floors-toggle').onclick = () => {
     const d = selPanel.querySelector('#bld-floors');
     const open = d.style.display === 'none';
     d.style.display = open ? 'block' : 'none';
-    selPanel.querySelector('#bld-floors-toggle').textContent = (open ? '▾' : '▸') + ' 逐层层高';
+    selPanel.querySelector('#bld-floors-toggle').textContent = (open ? '▾ ' : '▸ ') + t('bld.perFloor');
   };
   selPanel.querySelector('#bld-close').onclick = () => clearSel();
   selPanel.querySelector('#bld-del').onclick = async () => {
     if (!selected) return;
     const b = state.buildings.find((x) => x.id === selected);
-    const nm = b?.name || '该楼';
-    if (!await confirmModal({ title: '删除楼栋', message: `确定删除「${nm}」？` })) return;
+    const nm = b?.name || t('nameFallback', selected);
+    if (!await confirmModal({ title: t('dlg.delBld'), message: t('dlg.delBldMsg', nm) })) return;
     pushUndo();
     state.buildings = state.buildings.filter((x) => x.id !== selected);
     clearSel();
@@ -109,23 +110,23 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
   wallPanel.id = 'wall-settings';
   wallPanel.style.cssText = selPanel.style.cssText; // 同款样式
   wallPanel.innerHTML = `
-    <div style="font-weight:600;font-size:13px;margin-bottom:8px">围墙设置</div>
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px" data-i18n="wall.title">围墙设置</div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">墙高</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="wall.h">墙高</label>
       <input id="wall-h" type="number" step="any" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px;min-width:0">
     </div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">墙厚</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="wall.t">墙厚</label>
       <input id="wall-t" type="number" step="any" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px;min-width:0">
     </div>
     <div style="display:flex;gap:6px;margin-top:10px;justify-content:flex-end">
-      <button id="wall-del" style="padding:5px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#b3261e;cursor:pointer;font-size:12px">删除</button>
-      <button id="wall-close" style="padding:5px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px">取消选中</button>
+      <button id="wall-del" style="padding:5px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#b3261e;cursor:pointer;font-size:12px" data-i18n="bld.del">删除</button>
+      <button id="wall-close" style="padding:5px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px" data-i18n="bld.close">取消选中</button>
     </div>`;
   wallPanel.querySelector('#wall-close').onclick = () => clearSel();
   wallPanel.querySelector('#wall-del').onclick = async () => {
     if (!selWall) return;
-    if (!await confirmModal({ title: '删除围墙', message: '确定删除该围墙？' })) return;
+    if (!await confirmModal({ title: t('dlg.delWall'), message: t('dlg.delWallMsg') })) return;
     pushUndo();
     state.walls = state.walls.filter((x) => x.id !== selWall);
     clearSel();
@@ -192,7 +193,7 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
     for (let i = 0; i < b.floorCount; i++) {
       const v = b.overrides[i] ?? b.floorHeight;
       html += `<div style="display:flex;gap:4px;align-items:center;margin:3px 0">` +
-        `<label style="flex:0 0 44px;color:#8a909b;font-size:11px">第${i + 1}层</label>` +
+        `<label style="flex:0 0 44px;color:#8a909b;font-size:11px">${t('bld.floorN', i + 1)}</label>` +
         `<input data-fi="${i}" type="number" step="any" value="${v}" ` +
         `style="flex:1;padding:3px 5px;border:1px solid #e6e4de;border-radius:4px;font-size:11px;min-width:0"></div>`;
     }
@@ -294,7 +295,7 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
         const c = buildingCenter(b);
         const q = worldToPx(view, c.x, c.z);
         ctx.fillStyle = '#333'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
-        ctx.fillText(`${b.name || ''} ${b.floorCount}层×${b.floorHeight}m`.trim(), q.px, q.py - 14);
+        ctx.fillText(t('floorTag', b.name || '', b.floorCount, b.floorHeight), q.px, q.py - 14);
         // 旋转把手（楼上方圆形白底 + 旋转箭头图标，Material "rotate_right" 风格）
         const rp = worldToPx(view, c.x, c.z);
         const hx = rp.px, hy = rp.py - 30;
@@ -380,7 +381,7 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
   function drawLabel(step) {
     ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.font = '11px sans-serif';
     ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-    ctx.fillText(`比例 ${view.scale.toFixed(1)} px/m · 网格 ${step}m`, 6, 6);
+    ctx.fillText(t('label', view.scale, step), 6, 6);
   }
 
   // 标定点存图像像素，绘制时按当前底图变换换算 → 锁在底图特征上（拖底图/平移/缩放都跟随）
@@ -677,10 +678,10 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
 
   async function finishRect(x1, z1, x2, z2) {
     const r = await promptModal({
-      title: '新建矩形楼',
+      title: t('dlg.newRect'),
       fields: [
-        { key: 'h', label: '层高(米)', type: 'number', value: 3, step: 'any' },
-        { key: 'n', label: '层数', type: 'number', value: 6 },
+        { key: 'h', label: t('dlg.fhM'), type: 'number', value: 3, step: 'any' },
+        { key: 'n', label: t('dlg.fc'), type: 'number', value: 6 },
       ],
     });
     if (!r) { rectStart = null; rectCur = null; draw(); return; }
@@ -690,7 +691,7 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
     const minZ = Math.min(z1, z2), maxZ = Math.max(z1, z2);
     state.buildings.push({
       id: 'b' + Date.now(),
-      name: (state.buildings.length + 1) + '号',
+      name: t('nameDefault', state.buildings.length + 1),
       footprint: [[minX, minZ], [maxX, minZ], [maxX, maxZ], [minX, maxZ]],
       floorHeight: h, floorCount: n, overrides: {},
     });
@@ -706,10 +707,10 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
     if (mode === 'building') {
       if (clean.length >= 3) {
         const r = await promptModal({
-          title: '新建楼',
+          title: t('dlg.newBld'),
           fields: [
-            { key: 'h', label: '层高(米)', type: 'number', value: 3, step: 'any' },
-            { key: 'n', label: '层数', type: 'number', value: 6 },
+            { key: 'h', label: t('dlg.fhM'), type: 'number', value: 3, step: 'any' },
+            { key: 'n', label: t('dlg.fc'), type: 'number', value: 6 },
           ],
         });
         if (!r) { pts = []; draw(); return; }
@@ -717,7 +718,7 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
         const h = r.h || 3, n = Math.round(r.n) || 6;
         state.buildings.push({
           id: 'b' + Date.now(),
-          name: (state.buildings.length + 1) + '号',
+          name: t('nameDefault', state.buildings.length + 1),
           footprint: clean.map((p) => [p.x, p.z]),
           floorHeight: h, floorCount: n, overrides: {},
         });
@@ -726,10 +727,10 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
     } else {
       if (clean.length >= 2) {
         const r = await promptModal({
-          title: '新建围墙',
+          title: t('dlg.newWall'),
           fields: [
-            { key: 'h', label: '墙高(米)', type: 'number', value: 2.5, step: '0.1' },
-            { key: 't', label: '墙厚(米)', type: 'number', value: 0.4, step: '0.1' },
+            { key: 'h', label: t('dlg.whM'), type: 'number', value: 2.5, step: '0.1' },
+            { key: 't', label: t('dlg.wtM'), type: 'number', value: 0.4, step: '0.1' },
           ],
         });
         if (!r) { pts = []; draw(); return; }
@@ -771,7 +772,7 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
       .map((p) => (Number.isFinite(p.lat) && Number.isFinite(p.lon) ? `${p.lat}, ${p.lon}` : ''))
       .join('\n');
     const r = await promptModal({
-      title: '输入 4 点经纬度（按点序 1-4，每行：纬度,经度）',
+      title: t('dlg.coordsTitle'),
       fields: [{
         key: 'coords', type: 'textarea', rows: 4, value: preset,
         placeholder: '39.9100, 116.3900\n39.9100, 116.4050\n39.9200, 116.4050\n39.9200, 116.3900',
@@ -781,7 +782,7 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
     const rows = r.coords.split('\n').map((l) => l.trim()).filter(Boolean)
       .map((l) => l.split(/[,\s]+/).map(Number));
     if (rows.length !== 4 || rows.some((a) => a.length < 2 || a.slice(0, 2).some(Number.isNaN))) {
-      await alertModal({ title: '输入不完整', message: '需 4 行，每行：纬度,经度' });
+      await alertModal({ title: t('dlg.coordsBad'), message: t('dlg.coordsBadMsg') });
       promptCalibCoords();
       return;
     }
@@ -796,7 +797,7 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
     const geo = geoPointsToWorld(calibPts.map((p) => ({ lat: p.lat, lon: p.lon })));
     const H = solveHomography(srcPts, geo.world);
     if (!H) {
-      await alertModal({ title: '校正失败', message: '4 点退化（多点共线），请重新标定' });
+      await alertModal({ title: t('dlg.calibFail'), message: t('dlg.calibFailMsg') });
       resetCalib(); setMode('drag');
       return;
     }
@@ -858,5 +859,11 @@ export function initEditor2d({ canvas, state, onChange, onModeChange = () => {} 
   function setHover(id) { hover = id; draw(); }
 
   draw();
+  // 语言切换：重绘（标签/楼名标注）+ 刷新已展开的逐层层高行（第N层）
+  onLangChange(() => {
+    if (selected) { const b = state.buildings.find((x) => x.id === selected); if (b) renderFloorRows(b); }
+    draw();
+  });
+
   return { setMode, redraw: draw, loadImage, resetView, fitToBoundary, undo, redo, pushUndo, resizeCanvas, resizeBg, setBgMpp, clearBg, setHover, hasBg, startCalibrate };
 }

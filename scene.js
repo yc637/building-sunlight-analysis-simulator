@@ -8,6 +8,7 @@ import { refreshFloorColors } from './daylight.js';
 import { initLists } from './lists.js';
 import { geoPointsToWorld, serializeState, deserializeState, rotateFootprint } from './viewport.js';
 import { alertModal } from './modal.js';
+import { t, getLang, setLang, toggleLang, onLangChange, applyStatic } from './i18n.js';
 import { analyzeSunlightProgressive, southFaceIndex, nearestEdge } from './sunlight.js';
 
 export const state = {
@@ -345,7 +346,7 @@ document.getElementById('mode-drag').onclick = () => editor.setMode('drag');
 document.getElementById('reset-view').onclick = () => editor.resetView();
 document.getElementById('load-bg').onclick = () => document.getElementById('bg-file').click();
 document.getElementById('calibrate-bg').onclick = () => {
-  if (!state.bg) { alertModal({ message: '请先载入底图' }); return; }
+  if (!state.bg) { alertModal({ message: t('msg.loadBgFirst') }); return; }
   editor.startCalibrate();   // → mode 'calibrate' → onModeChange 高亮校正按钮
 };
 // 底图无极缩放：滑块 0..200 对数映射到 mpp 0.05..2（米/像素）
@@ -358,7 +359,7 @@ bgScale.oninput = () => {
 const bgLockBtn = document.getElementById('bg-lock');
 bgLockBtn.onclick = () => {
   state.bgLocked = !state.bgLocked;
-  bgLockBtn.textContent = state.bgLocked ? '🔓 解锁底图' : '🔒 锁底图';
+  bgLockBtn.textContent = state.bgLocked ? t('bg.unlock') : t('bg.lock');
 };
 // ± 微调：滑块步进 0.1
 function nudgeBg(delta) {
@@ -369,8 +370,8 @@ document.getElementById('bg-inc').onclick = () => nudgeBg(0.1);
 document.getElementById('bg-dec').onclick = () => nudgeBg(-0.1);
 // 删除底图：仅解锁后可删
 document.getElementById('bg-del').onclick = () => {
-  if (!state.bg) { alertModal({ message: '当前没有底图' }); return; }
-  if (state.bgLocked) { alertModal({ message: '请先解锁底图，才能删除' }); return; }
+  if (!state.bg) { alertModal({ message: t('msg.noBg') }); return; }
+  if (state.bgLocked) { alertModal({ message: t('msg.unlockFirst') }); return; }
   editor.clearBg();
   updateUnderlay3d(THREE);
 };
@@ -465,10 +466,10 @@ const app = document.getElementById('app');
 
   const minBtn = document.getElementById('minimize-plan');
   // 首次进入默认展开（不是最小化）
-  if (planWrap.classList.contains('minimized')) minBtn.textContent = '2D 编辑器';
+  if (planWrap.classList.contains('minimized')) minBtn.textContent = t('plan.title');
   minBtn.onclick = () => {
     const min = planWrap.classList.toggle('minimized');
-    minBtn.textContent = min ? '2D 编辑器' : '—';
+    minBtn.textContent = min ? t('plan.title') : '—';
     if (min) {
       planWrap.classList.remove('fullscreen');
       // 清掉拖动/缩放/全屏的 inline 残留，让 CSS .minimized 的 top/right 定位生效
@@ -487,7 +488,7 @@ const app = document.getElementById('app');
     planWrap.classList.remove('minimized');
     minBtn.textContent = '—';
     const fs = planWrap.classList.toggle('fullscreen');
-    fsBtn.textContent = fs ? '还原' : '全屏';
+    fsBtn.textContent = fs ? t('plan.restore') : t('plan.fullscreen');
     // 全屏：JS 直接钉死 fixed 定位 + 视口尺寸，不依赖 CSS 类被覆盖
     planWrap.style.position = 'fixed';
     if (fs) {
@@ -525,7 +526,7 @@ document.getElementById('draw-geo').onclick = () => {
     .filter((a) => a.length >= 2 && !a.slice(0, 2).some(Number.isNaN))
     .map(([lat, lon]) => ({ lat, lon }));
   if (pts.length < 3) {
-    alertModal({ message: '至少 3 个点（每行：纬度,经度）才能围成面' });
+    alertModal({ message: t('geo.tooFew') });
     return;
   }
   const g = geoPointsToWorld(pts);
@@ -589,8 +590,8 @@ function applyLoadedState(s) {
   editor.fitToBoundary();
 }
 document.getElementById('save-local').onclick = () => {
-  try { localStorage.setItem('daylight-state', serializeState(state)); alertModal({ message: '已保存到本地' }); }
-  catch (e) { alertModal({ message: '保存失败: ' + e.message }); }
+  try { localStorage.setItem('daylight-state', serializeState(state)); alertModal({ message: t('msg.saved') }); }
+  catch (e) { alertModal({ message: t('msg.saveFail') + ': ' + e.message }); }
 };
 document.getElementById('export-file').onclick = () => {
   const blob = new Blob([serializeState(state)], { type: 'application/json' });
@@ -606,8 +607,8 @@ document.getElementById('import-input').onchange = (e) => {
   if (!f) return;
   const reader = new FileReader();
   reader.onload = () => {
-    try { applyLoadedState(deserializeState(reader.result)); alertModal({ message: '已导入' }); }
-    catch (err) { alertModal({ message: '导入失败: ' + err.message }); }
+    try { applyLoadedState(deserializeState(reader.result)); alertModal({ message: t('msg.imported') }); }
+    catch (err) { alertModal({ message: t('msg.importFail') + ': ' + err.message }); }
   };
   reader.readAsText(f);
   e.target.value = '';
@@ -681,12 +682,12 @@ function renderAnalysis(result) {
     for (const f of b.floors) {
       total++; if (f.pass) passCount++;
       const color = f.pass ? '#2e7d32' : '#c62828';
-      html += `<tr style="color:${color}"><td>第${f.floor + 1}层</td><td style="text-align:right">${f.hours.toFixed(1)}h</td><td style="text-align:right">${f.pass ? '✓' : '✗'}</td></tr>`;
+      html += `<tr style="color:${color}"><td>${t('bld.floorN', f.floor + 1)}</td><td style="text-align:right">${f.hours.toFixed(1)}h</td><td style="text-align:right">${f.pass ? '✓' : '✗'}</td></tr>`;
     }
     html += '</table>';
   }
-  rep.innerHTML = total ? `<div style="margin-bottom:4px;color:#555">达标 ${passCount}/${total} 层</div>` + html
-                        : `<div style="color:#8a909b">无选中立面（3D 点击楼立面选择）</div>`;
+  rep.innerHTML = total ? `<div style="margin-bottom:4px;color:#555">${t('analysis.pass', passCount, total)}</div>` + html
+                        : `<div style="color:#8a909b">${t('analysis.noFace')}</div>`;
   renderLegend();
 }
 
@@ -713,8 +714,67 @@ function renderLegend() {
   if (t) t.onclick = () => document.getElementById('sec-lists').classList.toggle('collapsed');
 })();
 
-// 使用说明弹窗
-const HELP_HTML = `
+// 使用说明弹窗（中/英）
+const HELP_EN = `
+<h2 style="margin:0 0 6px;font-size:18px">Building Sunlight Analysis Simulator · Guide</h2>
+<p style="color:#8a909b;margin:0 0 14px">Draw buildings/walls in the 2D editor, see sunlight and shadows in real-time 3D, and run facade sunlight-hours analysis. Data auto-saves to your browser.</p>
+
+<h3>① Scene bounds (right panel)</h3>
+<ul>
+  <li>Enter one point per line as "lat,lon" (≥3 points), then click "Draw bounds (set latitude)" to outline the site; latitude/longitude are set from the center automatically.</li>
+</ul>
+
+<h3>② Sun</h3>
+<ul>
+  <li>Drag sliders or use ± for <b>latitude/longitude/date/time</b>; "Winter sol. / Equinox / Summer sol." set standard days.</li>
+  <li>"▶ Play" loops time (true solar time 5→21h); the dropdown sets <b>speed</b> (0.1×–8×).</li>
+  <li>Buildings are warm-lit by day (sun-facing bright, shaded dark) and black after sunset. The compass (top-left) rotates with the view.</li>
+</ul>
+
+<h3>③ Building / Wall (top bar)</h3>
+<ul>
+  <li><b>Click to add points</b>, <b>Enter or right-click to finish</b>, <b>Backspace</b> to undo the last point.</li>
+  <li>In Building mode, <b>drag on empty space</b> to quickly draw a rectangular building.</li>
+  <li>A dialog asks for floor height / floor count (height accepts decimals).</li>
+</ul>
+
+<h3>④ Drag / Rotate / Settings</h3>
+<ul>
+  <li><b>Drag</b> mode: move buildings, walls, basemap, canvas; left button also pans the 3D view.</li>
+  <li>Click a building → "Building" panel: edit name/floor height/floors, expand <b>Per-floor height</b> for individual floors, or <b>Delete</b> (with confirmation).</li>
+  <li>With a building selected, drag its orange <b>rotate handle</b> to rotate it.</li>
+  <li><b>Undo/Redo</b>: Ctrl+Z / Ctrl+Shift+Z (or Ctrl+Y) for create/delete/move/rotate.</li>
+</ul>
+
+<h3>⑤ Basemap & perspective rectification</h3>
+<ul>
+  <li>"Basemap" loads a satellite/site image; ± or slider to scale; "🔒 Lock" prevents accidental drag; "Delete basemap" removes it.</li>
+  <li><b>Rectify</b>: for an obliquely-shot image, click "Rectify", mark 4 points, then enter their lat/lon in order; a homography reprojects it into an orthographic plan.</li>
+</ul>
+
+<h3>⑥ Sunlight analysis</h3>
+<ul>
+  <li>Uses the <b>date in the Sun panel</b>; accumulates facade sunlight hours in true solar time 08:00–16:00 (2h threshold).</li>
+  <li>Analyzes each building's <b>south facade</b> by default; <b>click a facade in 3D</b> to add/remove faces (blue outline).</li>
+  <li>Click "Analyze" (with overlay + progress bar); facades show a <b>full gradient heatmap</b> (0h red → 8h green, see the legend); the report lists per-floor hours and pass ✓/✗.</li>
+  <li>"Clear heatmap" hides results; editing geometry/date clears stale results automatically.</li>
+</ul>
+
+<h3>⑦ Save / Export / Import</h3>
+<ul>
+  <li>Changes <b>auto-save</b> to the browser and restore on reload.</li>
+  <li>"Save" stores locally; "Export" downloads JSON (basemap included); "Import" loads JSON.</li>
+</ul>
+
+<h3>⑧ 2D editor window</h3>
+<ul>
+  <li>Drag the title bar to move; drag edges/corner to resize; "Fullscreen" / "—" to minimize.</li>
+  <li>Right-drag to pan, scroll to zoom at the cursor, "Reset view" to restore.</li>
+</ul>
+
+<p style="color:#8a909b;margin-top:14px;font-size:11px">Note: analysis is a facade-grid estimation (engineering reference). China's GB 50180 uses different time bands per standard day (Great Cold 8–16, Winter Solstice 9–15); this tool uses 8–16 uniformly.</p>
+`;
+const HELP_ZH = `
 <h2 style="margin:0 0 6px;font-size:18px">楼房采光模拟 · 使用说明</h2>
 <p style="color:#8a909b;margin:0 0 14px">在 2D 编辑器画楼/围墙，3D 实时看日照与阴影，做立面日照时数分析。数据自动保存到本地浏览器。</p>
 
@@ -773,32 +833,36 @@ const HELP_HTML = `
 
 <p style="color:#8a909b;margin-top:14px;font-size:11px">注：日照分析为立面网格估算（工程参考）；国标不同标准日窗口不同（大寒 8–16、冬至 9–15），本工具统一 8–16。</p>
 `;
-function showHelp() {
-  let ov = document.getElementById('help-overlay');
-  if (!ov) {
-    ov = document.createElement('div');
-    ov.id = 'help-overlay';
-    ov.style.cssText = 'position:fixed;inset:0;z-index:210;background:rgba(42,45,51,.45);display:flex;align-items:center;justify-content:center;padding:24px;';
-    const box = document.createElement('div');
-    box.style.cssText = 'background:#fff;border-radius:12px;max-width:680px;width:100%;max-height:86vh;overflow:auto;padding:22px 26px;box-shadow:0 12px 40px rgba(0,0,0,.3);font:13px/1.7 -apple-system,"PingFang SC",sans-serif;color:#2a2d33;';
-    box.innerHTML = HELP_HTML +
-      '<div style="text-align:right;margin-top:16px"><button id="help-close" style="padding:7px 18px;border:1px solid #2b5f8a;border-radius:6px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:13px">知道了</button></div>';
-    ov.appendChild(box);
-    document.body.appendChild(ov);
-    const hide = () => { ov.style.display = 'none'; };
-    ov.addEventListener('mousedown', (e) => { if (e.target === ov) hide(); });
-    box.querySelector('#help-close').onclick = hide;
-    // Esc 关闭说明（仅当说明可见时）
+let _helpOv = null;
+function buildHelp() {
+  if (!_helpOv) {
+    _helpOv = document.createElement('div');
+    _helpOv.id = 'help-overlay';
+    _helpOv.style.cssText = 'position:fixed;inset:0;z-index:210;background:rgba(42,45,51,.45);display:none;align-items:center;justify-content:center;padding:24px;';
+    document.body.appendChild(_helpOv);
+    _helpOv.addEventListener('mousedown', (e) => { if (e.target === _helpOv) _helpOv.style.display = 'none'; });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && ov.style.display !== 'none') { e.stopPropagation(); hide(); }
+      if (e.key === 'Escape' && _helpOv.style.display !== 'none') { e.stopPropagation(); _helpOv.style.display = 'none'; }
     }, true);
-    // 分区标题样式
-    box.querySelectorAll('h3').forEach((h) => { h.style.cssText = 'font-size:13px;margin:14px 0 4px;color:#2b5f8a'; });
-    box.querySelectorAll('ul').forEach((u) => { u.style.cssText = 'margin:0 0 4px;padding-left:20px'; });
   }
-  ov.style.display = 'flex';
+  const okText = getLang() === 'en' ? 'Got it' : '知道了';
+  _helpOv.innerHTML =
+    '<div style="background:#fff;border-radius:12px;max-width:680px;width:100%;max-height:86vh;overflow:auto;padding:22px 26px;box-shadow:0 12px 40px rgba(0,0,0,.3);font:13px/1.7 -apple-system,sans-serif;color:#2a2d33">' +
+    (getLang() === 'en' ? HELP_EN : HELP_ZH) +
+    `<div style="text-align:right;margin-top:16px"><button id="help-close" style="padding:7px 18px;border:1px solid #2b5f8a;border-radius:6px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:13px">${okText}</button></div></div>`;
+  const box = _helpOv.firstChild;
+  box.querySelector('#help-close').onclick = () => { _helpOv.style.display = 'none'; };
+  box.querySelectorAll('h3').forEach((h) => { h.style.cssText = 'font-size:13px;margin:14px 0 4px;color:#2b5f8a'; });
+  box.querySelectorAll('ul').forEach((u) => { u.style.cssText = 'margin:0 0 4px;padding-left:20px'; });
 }
+function showHelp() { buildHelp(); _helpOv.style.display = 'flex'; }
 document.getElementById('help-btn').onclick = showHelp;
+// 语言切换：说明打开时按新语言重建
+onLangChange(() => { if (_helpOv && _helpOv.style.display !== 'none') buildHelp(); });
+// 语言切换按钮
+document.getElementById('lang-btn').onclick = toggleLang;
+// 底图锁定按钮文字随语言（其余静态由 applyStatic 处理）
+onLangChange(() => { document.getElementById('bg-lock').textContent = state.bgLocked ? t('bg.unlock') : t('bg.lock'); });
 
 // 清除热力图（保留立面选择高亮）
 document.getElementById('clear-sunlight').onclick = () => { clearAnalysis(); renderLegend(); };
@@ -812,7 +876,7 @@ function showProgress() {
     ov.style.cssText = 'position:fixed;inset:0;z-index:200;background:rgba(42,45,51,.4);display:flex;align-items:center;justify-content:center;';
     ov.innerHTML =
       '<div style="background:#fff;border-radius:10px;padding:20px 24px;min-width:280px;box-shadow:0 8px 30px rgba(0,0,0,.25);font:13px sans-serif;color:#2a2d33;text-align:center">' +
-      '<div style="margin-bottom:12px;font-weight:600">日照分析计算中…</div>' +
+      '<div style="margin-bottom:12px;font-weight:600">' + t('analysis.computing') + '</div>' +
       '<div style="height:10px;background:#eee;border-radius:5px;overflow:hidden">' +
       '<div id="sun-progress" style="height:100%;width:0;background:#2b5f8a;transition:width .12s"></div></div>' +
       '<div id="sun-progress-pct" style="margin-top:8px;color:#8a909b">0%</div></div>';
@@ -831,7 +895,7 @@ function setProgress(f) {
 function hideProgress() { const ov = document.getElementById('sun-overlay'); if (ov) ov.style.display = 'none'; }
 
 document.getElementById('run-sunlight').onclick = async () => {
-  if (!state.buildings.length) { alertModal({ message: '请先画楼' }); return; }
+  if (!state.buildings.length) { alertModal({ message: t('analysis.needBuilding') }); return; }
   const dayOfYear = state.dayOfYear;   // 恒按太阳面板所选日期；达标线 2h
   const threshold = 2;
   showProgress();
@@ -890,6 +954,8 @@ refreshSelection();
 renderLegend();   // 色标常显（不依赖是否已跑分析）
 updateSun();
 loop();
+// 应用存储的语言（含首次静态翻译 + 通知各模块按语言重渲染）
+setLang(getLang());
 
 // 供后续 Task 复用
 export { scene, camera, THREE };

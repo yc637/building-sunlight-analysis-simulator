@@ -695,8 +695,8 @@
       return 0;
     }
   }
-  function lerp(x, y, t) {
-    return (1 - t) * x + t * y;
+  function lerp(x, y, t2) {
+    return (1 - t2) * x + t2 * y;
   }
   function damp(x, y, lambda, dt) {
     return lerp(x, y, 1 - Math.exp(-lambda * dt));
@@ -727,10 +727,10 @@
   }
   function seededRandom(s) {
     if (s !== void 0) _seed = s;
-    let t = _seed += 1831565813;
-    t = Math.imul(t ^ t >>> 15, t | 1);
-    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    let t2 = _seed += 1831565813;
+    t2 = Math.imul(t2 ^ t2 >>> 15, t2 | 1);
+    t2 ^= t2 + Math.imul(t2 ^ t2 >>> 7, t2 | 61);
+    return ((t2 ^ t2 >>> 14) >>> 0) / 4294967296;
   }
   function degToRad(degrees) {
     return degrees * DEG2RAD;
@@ -2385,17 +2385,17 @@
       this._z = z;
       this._w = w;
     }
-    static slerpFlat(dst, dstOffset, src0, srcOffset0, src1, srcOffset1, t) {
+    static slerpFlat(dst, dstOffset, src0, srcOffset0, src1, srcOffset1, t2) {
       let x0 = src0[srcOffset0 + 0], y0 = src0[srcOffset0 + 1], z0 = src0[srcOffset0 + 2], w0 = src0[srcOffset0 + 3];
       const x1 = src1[srcOffset1 + 0], y1 = src1[srcOffset1 + 1], z1 = src1[srcOffset1 + 2], w1 = src1[srcOffset1 + 3];
-      if (t === 0) {
+      if (t2 === 0) {
         dst[dstOffset + 0] = x0;
         dst[dstOffset + 1] = y0;
         dst[dstOffset + 2] = z0;
         dst[dstOffset + 3] = w0;
         return;
       }
-      if (t === 1) {
+      if (t2 === 1) {
         dst[dstOffset + 0] = x1;
         dst[dstOffset + 1] = y1;
         dst[dstOffset + 2] = z1;
@@ -2403,19 +2403,19 @@
         return;
       }
       if (w0 !== w1 || x0 !== x1 || y0 !== y1 || z0 !== z1) {
-        let s = 1 - t;
+        let s = 1 - t2;
         const cos = x0 * x1 + y0 * y1 + z0 * z1 + w0 * w1, dir = cos >= 0 ? 1 : -1, sqrSin = 1 - cos * cos;
         if (sqrSin > Number.EPSILON) {
           const sin = Math.sqrt(sqrSin), len = Math.atan2(sin, cos * dir);
           s = Math.sin(s * len) / sin;
-          t = Math.sin(t * len) / sin;
+          t2 = Math.sin(t2 * len) / sin;
         }
-        const tDir = t * dir;
+        const tDir = t2 * dir;
         x0 = x0 * s + x1 * tDir;
         y0 = y0 * s + y1 * tDir;
         z0 = z0 * s + z1 * tDir;
         w0 = w0 * s + w1 * tDir;
-        if (s === 1 - t) {
+        if (s === 1 - t2) {
           const f = 1 / Math.sqrt(x0 * x0 + y0 * y0 + z0 * z0 + w0 * w0);
           x0 *= f;
           y0 *= f;
@@ -2611,8 +2611,8 @@
     rotateTowards(q, step) {
       const angle = this.angleTo(q);
       if (angle === 0) return this;
-      const t = Math.min(1, step / angle);
-      this.slerp(q, t);
+      const t2 = Math.min(1, step / angle);
+      this.slerp(q, t2);
       return this;
     }
     identity() {
@@ -2670,9 +2670,9 @@
       this._onChangeCallback();
       return this;
     }
-    slerp(qb, t) {
-      if (t === 0) return this;
-      if (t === 1) return this.copy(qb);
+    slerp(qb, t2) {
+      if (t2 === 0) return this;
+      if (t2 === 1) return this.copy(qb);
       const x = this._x, y = this._y, z = this._z, w = this._w;
       let cosHalfTheta = w * qb._w + x * qb._x + y * qb._y + z * qb._z;
       if (cosHalfTheta < 0) {
@@ -2693,17 +2693,17 @@
       }
       const sqrSinHalfTheta = 1 - cosHalfTheta * cosHalfTheta;
       if (sqrSinHalfTheta <= Number.EPSILON) {
-        const s = 1 - t;
-        this._w = s * w + t * this._w;
-        this._x = s * x + t * this._x;
-        this._y = s * y + t * this._y;
-        this._z = s * z + t * this._z;
+        const s = 1 - t2;
+        this._w = s * w + t2 * this._w;
+        this._x = s * x + t2 * this._x;
+        this._y = s * y + t2 * this._y;
+        this._z = s * z + t2 * this._z;
         this.normalize();
         return this;
       }
       const sinHalfTheta = Math.sqrt(sqrSinHalfTheta);
       const halfTheta = Math.atan2(sinHalfTheta, cosHalfTheta);
-      const ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta, ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
+      const ratioA = Math.sin((1 - t2) * halfTheta) / sinHalfTheta, ratioB = Math.sin(t2 * halfTheta) / sinHalfTheta;
       this._w = w * ratioA + this._w * ratioB;
       this._x = x * ratioA + this._x * ratioB;
       this._y = y * ratioA + this._y * ratioB;
@@ -2711,8 +2711,8 @@
       this._onChangeCallback();
       return this;
     }
-    slerpQuaternions(qa, qb, t) {
-      return this.copy(qa).slerp(qb, t);
+    slerpQuaternions(qa, qb, t2) {
+      return this.copy(qa).slerp(qb, t2);
     }
     random() {
       const u1 = Math.random();
@@ -3169,10 +3169,10 @@
     }
     randomDirection() {
       const u = (Math.random() - 0.5) * 2;
-      const t = Math.random() * Math.PI * 2;
+      const t2 = Math.random() * Math.PI * 2;
       const f = Math.sqrt(1 - u ** 2);
-      this.x = f * Math.cos(t);
-      this.y = f * Math.sin(t);
+      this.x = f * Math.cos(t2);
+      this.y = f * Math.sin(t2);
       this.z = u;
       return this;
     }
@@ -3626,15 +3626,15 @@
       this.direction.copy(ray.direction);
       return this;
     }
-    at(t, target) {
-      return target.copy(this.origin).addScaledVector(this.direction, t);
+    at(t2, target) {
+      return target.copy(this.origin).addScaledVector(this.direction, t2);
     }
     lookAt(v) {
       this.direction.copy(v).sub(this.origin).normalize();
       return this;
     }
-    recast(t) {
-      this.origin.copy(this.at(t, _vector$a));
+    recast(t2) {
+      this.origin.copy(this.at(t2, _vector$a));
       return this;
     }
     closestPointToPoint(point, target) {
@@ -3740,15 +3740,15 @@
         }
         return null;
       }
-      const t = -(this.origin.dot(plane.normal) + plane.constant) / denominator;
-      return t >= 0 ? t : null;
+      const t2 = -(this.origin.dot(plane.normal) + plane.constant) / denominator;
+      return t2 >= 0 ? t2 : null;
     }
     intersectPlane(plane, target) {
-      const t = this.distanceToPlane(plane);
-      if (t === null) {
+      const t2 = this.distanceToPlane(plane);
+      if (t2 === null) {
         return null;
       }
-      return this.at(t, target);
+      return this.at(t2, target);
     }
     intersectsPlane(plane) {
       const distToPoint = plane.distanceToPoint(this.origin);
@@ -4386,9 +4386,9 @@
     makeRotationAxis(axis, angle) {
       const c = Math.cos(angle);
       const s = Math.sin(angle);
-      const t = 1 - c;
+      const t2 = 1 - c;
       const x = axis.x, y = axis.y, z = axis.z;
-      const tx = t * x, ty = t * y;
+      const tx = t2 * x, ty = t2 * y;
       this.set(
         tx * x + c,
         tx * y - s * z,
@@ -4400,7 +4400,7 @@
         0,
         tx * z - s * y,
         ty * z + s * x,
-        t * z * z + c,
+        t2 * z * z + c,
         0,
         0,
         0,
@@ -5707,12 +5707,12 @@
   };
   var _hslA = { h: 0, s: 0, l: 0 };
   var _hslB = { h: 0, s: 0, l: 0 };
-  function hue2rgb(p, q, t) {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * 6 * (2 / 3 - t);
+  function hue2rgb(p, q, t2) {
+    if (t2 < 0) t2 += 1;
+    if (t2 > 1) t2 -= 1;
+    if (t2 < 1 / 6) return p + (q - p) * 6 * t2;
+    if (t2 < 1 / 2) return q;
+    if (t2 < 2 / 3) return p + (q - p) * 6 * (2 / 3 - t2);
     return p;
   }
   var Color = class {
@@ -7148,10 +7148,10 @@
       function handleVertex(v) {
         n.fromArray(normals, v * 3);
         n2.copy(n);
-        const t = tan1[v];
-        tmp2.copy(t);
-        tmp2.sub(n.multiplyScalar(n.dot(t))).normalize();
-        tmp22.crossVectors(n2, t);
+        const t2 = tan1[v];
+        tmp2.copy(t2);
+        tmp2.sub(n.multiplyScalar(n.dot(t2))).normalize();
+        tmp22.crossVectors(n2, t2);
         const test = tmp22.dot(tan2[v]);
         const w = test < 0 ? -1 : 1;
         tangents[v * 4] = tmp2.x;
@@ -8351,11 +8351,11 @@
         }
         return null;
       }
-      const t = -(line.start.dot(this.normal) + this.constant) / denominator;
-      if (t < 0 || t > 1) {
+      const t2 = -(line.start.dot(this.normal) + this.constant) / denominator;
+      if (t2 < 0 || t2 > 1) {
         return null;
       }
-      return target.copy(line.start).addScaledVector(direction, t);
+      return target.copy(line.start).addScaledVector(direction, t2);
     }
     intersectsLine(line) {
       const startSign = this.distanceToPoint(line.start);
@@ -20484,8 +20484,8 @@
     // Get point at relative position in curve according to arc length
     // - u [0 .. 1]
     getPointAt(u, optionalTarget) {
-      const t = this.getUtoTmapping(u);
-      return this.getPoint(t, optionalTarget);
+      const t2 = this.getUtoTmapping(u);
+      return this.getPoint(t2, optionalTarget);
     }
     // Get sequence of points using getPoint( t )
     getPoints(divisions = 5) {
@@ -20563,28 +20563,28 @@
       const lengthAfter = arcLengths[i + 1];
       const segmentLength = lengthAfter - lengthBefore;
       const segmentFraction = (targetArcLength - lengthBefore) / segmentLength;
-      const t = (i + segmentFraction) / (il - 1);
-      return t;
+      const t2 = (i + segmentFraction) / (il - 1);
+      return t2;
     }
     // Returns a unit vector tangent at t
     // In case any sub curve does not implement its tangent derivation,
     // 2 points a small delta apart will be used to find its gradient
     // which seems to give a reasonable approximation
-    getTangent(t, optionalTarget) {
+    getTangent(t2, optionalTarget) {
       const delta = 1e-4;
-      let t1 = t - delta;
-      let t2 = t + delta;
+      let t1 = t2 - delta;
+      let t22 = t2 + delta;
       if (t1 < 0) t1 = 0;
-      if (t2 > 1) t2 = 1;
+      if (t22 > 1) t22 = 1;
       const pt1 = this.getPoint(t1);
-      const pt2 = this.getPoint(t2);
+      const pt2 = this.getPoint(t22);
       const tangent = optionalTarget || (pt1.isVector2 ? new Vector2() : new Vector3());
       tangent.copy(pt2).sub(pt1).normalize();
       return tangent;
     }
     getTangentAt(u, optionalTarget) {
-      const t = this.getUtoTmapping(u);
-      return this.getTangent(t, optionalTarget);
+      const t2 = this.getUtoTmapping(u);
+      return this.getTangent(t2, optionalTarget);
     }
     computeFrenetFrames(segments, closed) {
       const normal = new Vector3();
@@ -20683,7 +20683,7 @@
       this.aClockwise = aClockwise;
       this.aRotation = aRotation;
     }
-    getPoint(t, optionalTarget) {
+    getPoint(t2, optionalTarget) {
       const point = optionalTarget || new Vector2();
       const twoPi = Math.PI * 2;
       let deltaAngle = this.aEndAngle - this.aStartAngle;
@@ -20704,7 +20704,7 @@
           deltaAngle = deltaAngle - twoPi;
         }
       }
-      const angle = this.aStartAngle + t * deltaAngle;
+      const angle = this.aStartAngle + t2 * deltaAngle;
       let x = this.aX + this.xRadius * Math.cos(angle);
       let y = this.aY + this.yRadius * Math.sin(angle);
       if (this.aRotation !== 0) {
@@ -20780,10 +20780,10 @@
         t2 *= dt1;
         init(x1, x2, t1, t2);
       },
-      calc: function(t) {
-        const t2 = t * t;
-        const t3 = t2 * t;
-        return c0 + c1 * t + c2 * t2 + c3 * t3;
+      calc: function(t2) {
+        const t22 = t2 * t2;
+        const t3 = t22 * t2;
+        return c0 + c1 * t2 + c2 * t22 + c3 * t3;
       }
     };
   }
@@ -20801,11 +20801,11 @@
       this.curveType = curveType;
       this.tension = tension;
     }
-    getPoint(t, optionalTarget = new Vector3()) {
+    getPoint(t2, optionalTarget = new Vector3()) {
       const point = optionalTarget;
       const points = this.points;
       const l = points.length;
-      const p = (l - (this.closed ? 0 : 1)) * t;
+      const p = (l - (this.closed ? 0 : 1)) * t2;
       let intPoint = Math.floor(p);
       let weight = p - intPoint;
       if (this.closed) {
@@ -20889,42 +20889,42 @@
       return this;
     }
   };
-  function CatmullRom(t, p0, p1, p2, p3) {
+  function CatmullRom(t2, p0, p1, p2, p3) {
     const v0 = (p2 - p0) * 0.5;
     const v1 = (p3 - p1) * 0.5;
-    const t2 = t * t;
-    const t3 = t * t2;
-    return (2 * p1 - 2 * p2 + v0 + v1) * t3 + (-3 * p1 + 3 * p2 - 2 * v0 - v1) * t2 + v0 * t + p1;
+    const t22 = t2 * t2;
+    const t3 = t2 * t22;
+    return (2 * p1 - 2 * p2 + v0 + v1) * t3 + (-3 * p1 + 3 * p2 - 2 * v0 - v1) * t22 + v0 * t2 + p1;
   }
-  function QuadraticBezierP0(t, p) {
-    const k = 1 - t;
+  function QuadraticBezierP0(t2, p) {
+    const k = 1 - t2;
     return k * k * p;
   }
-  function QuadraticBezierP1(t, p) {
-    return 2 * (1 - t) * t * p;
+  function QuadraticBezierP1(t2, p) {
+    return 2 * (1 - t2) * t2 * p;
   }
-  function QuadraticBezierP2(t, p) {
-    return t * t * p;
+  function QuadraticBezierP2(t2, p) {
+    return t2 * t2 * p;
   }
-  function QuadraticBezier(t, p0, p1, p2) {
-    return QuadraticBezierP0(t, p0) + QuadraticBezierP1(t, p1) + QuadraticBezierP2(t, p2);
+  function QuadraticBezier(t2, p0, p1, p2) {
+    return QuadraticBezierP0(t2, p0) + QuadraticBezierP1(t2, p1) + QuadraticBezierP2(t2, p2);
   }
-  function CubicBezierP0(t, p) {
-    const k = 1 - t;
+  function CubicBezierP0(t2, p) {
+    const k = 1 - t2;
     return k * k * k * p;
   }
-  function CubicBezierP1(t, p) {
-    const k = 1 - t;
-    return 3 * k * k * t * p;
+  function CubicBezierP1(t2, p) {
+    const k = 1 - t2;
+    return 3 * k * k * t2 * p;
   }
-  function CubicBezierP2(t, p) {
-    return 3 * (1 - t) * t * t * p;
+  function CubicBezierP2(t2, p) {
+    return 3 * (1 - t2) * t2 * t2 * p;
   }
-  function CubicBezierP3(t, p) {
-    return t * t * t * p;
+  function CubicBezierP3(t2, p) {
+    return t2 * t2 * t2 * p;
   }
-  function CubicBezier(t, p0, p1, p2, p3) {
-    return CubicBezierP0(t, p0) + CubicBezierP1(t, p1) + CubicBezierP2(t, p2) + CubicBezierP3(t, p3);
+  function CubicBezier(t2, p0, p1, p2, p3) {
+    return CubicBezierP0(t2, p0) + CubicBezierP1(t2, p1) + CubicBezierP2(t2, p2) + CubicBezierP3(t2, p3);
   }
   var CubicBezierCurve = class extends Curve {
     constructor(v0 = new Vector2(), v1 = new Vector2(), v2 = new Vector2(), v3 = new Vector2()) {
@@ -20936,12 +20936,12 @@
       this.v2 = v2;
       this.v3 = v3;
     }
-    getPoint(t, optionalTarget = new Vector2()) {
+    getPoint(t2, optionalTarget = new Vector2()) {
       const point = optionalTarget;
       const v0 = this.v0, v1 = this.v1, v2 = this.v2, v3 = this.v3;
       point.set(
-        CubicBezier(t, v0.x, v1.x, v2.x, v3.x),
-        CubicBezier(t, v0.y, v1.y, v2.y, v3.y)
+        CubicBezier(t2, v0.x, v1.x, v2.x, v3.x),
+        CubicBezier(t2, v0.y, v1.y, v2.y, v3.y)
       );
       return point;
     }
@@ -20980,13 +20980,13 @@
       this.v2 = v2;
       this.v3 = v3;
     }
-    getPoint(t, optionalTarget = new Vector3()) {
+    getPoint(t2, optionalTarget = new Vector3()) {
       const point = optionalTarget;
       const v0 = this.v0, v1 = this.v1, v2 = this.v2, v3 = this.v3;
       point.set(
-        CubicBezier(t, v0.x, v1.x, v2.x, v3.x),
-        CubicBezier(t, v0.y, v1.y, v2.y, v3.y),
-        CubicBezier(t, v0.z, v1.z, v2.z, v3.z)
+        CubicBezier(t2, v0.x, v1.x, v2.x, v3.x),
+        CubicBezier(t2, v0.y, v1.y, v2.y, v3.y),
+        CubicBezier(t2, v0.z, v1.z, v2.z, v3.z)
       );
       return point;
     }
@@ -21023,13 +21023,13 @@
       this.v1 = v1;
       this.v2 = v2;
     }
-    getPoint(t, optionalTarget = new Vector2()) {
+    getPoint(t2, optionalTarget = new Vector2()) {
       const point = optionalTarget;
-      if (t === 1) {
+      if (t2 === 1) {
         point.copy(this.v2);
       } else {
         point.copy(this.v2).sub(this.v1);
-        point.multiplyScalar(t).add(this.v1);
+        point.multiplyScalar(t2).add(this.v1);
       }
       return point;
     }
@@ -21037,7 +21037,7 @@
     getPointAt(u, optionalTarget) {
       return this.getPoint(u, optionalTarget);
     }
-    getTangent(t, optionalTarget = new Vector2()) {
+    getTangent(t2, optionalTarget = new Vector2()) {
       return optionalTarget.subVectors(this.v2, this.v1).normalize();
     }
     getTangentAt(u, optionalTarget) {
@@ -21070,13 +21070,13 @@
       this.v1 = v1;
       this.v2 = v2;
     }
-    getPoint(t, optionalTarget = new Vector3()) {
+    getPoint(t2, optionalTarget = new Vector3()) {
       const point = optionalTarget;
-      if (t === 1) {
+      if (t2 === 1) {
         point.copy(this.v2);
       } else {
         point.copy(this.v2).sub(this.v1);
-        point.multiplyScalar(t).add(this.v1);
+        point.multiplyScalar(t2).add(this.v1);
       }
       return point;
     }
@@ -21084,7 +21084,7 @@
     getPointAt(u, optionalTarget) {
       return this.getPoint(u, optionalTarget);
     }
-    getTangent(t, optionalTarget = new Vector3()) {
+    getTangent(t2, optionalTarget = new Vector3()) {
       return optionalTarget.subVectors(this.v2, this.v1).normalize();
     }
     getTangentAt(u, optionalTarget) {
@@ -21118,12 +21118,12 @@
       this.v1 = v1;
       this.v2 = v2;
     }
-    getPoint(t, optionalTarget = new Vector2()) {
+    getPoint(t2, optionalTarget = new Vector2()) {
       const point = optionalTarget;
       const v0 = this.v0, v1 = this.v1, v2 = this.v2;
       point.set(
-        QuadraticBezier(t, v0.x, v1.x, v2.x),
-        QuadraticBezier(t, v0.y, v1.y, v2.y)
+        QuadraticBezier(t2, v0.x, v1.x, v2.x),
+        QuadraticBezier(t2, v0.y, v1.y, v2.y)
       );
       return point;
     }
@@ -21158,13 +21158,13 @@
       this.v1 = v1;
       this.v2 = v2;
     }
-    getPoint(t, optionalTarget = new Vector3()) {
+    getPoint(t2, optionalTarget = new Vector3()) {
       const point = optionalTarget;
       const v0 = this.v0, v1 = this.v1, v2 = this.v2;
       point.set(
-        QuadraticBezier(t, v0.x, v1.x, v2.x),
-        QuadraticBezier(t, v0.y, v1.y, v2.y),
-        QuadraticBezier(t, v0.z, v1.z, v2.z)
+        QuadraticBezier(t2, v0.x, v1.x, v2.x),
+        QuadraticBezier(t2, v0.y, v1.y, v2.y),
+        QuadraticBezier(t2, v0.z, v1.z, v2.z)
       );
       return point;
     }
@@ -21197,10 +21197,10 @@
       this.type = "SplineCurve";
       this.points = points;
     }
-    getPoint(t, optionalTarget = new Vector2()) {
+    getPoint(t2, optionalTarget = new Vector2()) {
       const point = optionalTarget;
       const points = this.points;
-      const p = (points.length - 1) * t;
+      const p = (points.length - 1) * t2;
       const intPoint = Math.floor(p);
       const weight = p - intPoint;
       const p0 = points[intPoint === 0 ? intPoint : intPoint - 1];
@@ -21280,8 +21280,8 @@
     // 2. Locate and identify type of curve
     // 3. Get t for the curve
     // 4. Return curve.getPointAt(t')
-    getPoint(t, optionalTarget) {
-      const d = t * this.getLength();
+    getPoint(t2, optionalTarget) {
+      const d = t2 * this.getLength();
       const curveLengths = this.getCurveLengths();
       let i = 0;
       while (i < curveLengths.length) {
@@ -21957,8 +21957,8 @@
   };
   var DodecahedronGeometry = class _DodecahedronGeometry extends PolyhedronGeometry {
     constructor(radius = 1, detail = 0) {
-      const t = (1 + Math.sqrt(5)) / 2;
-      const r = 1 / t;
+      const t2 = (1 + Math.sqrt(5)) / 2;
+      const r = 1 / t2;
       const vertices = [
         // (±1, ±1, ±1)
         -1,
@@ -21988,40 +21988,40 @@
         // (0, ±1/φ, ±φ)
         0,
         -r,
-        -t,
+        -t2,
         0,
         -r,
-        t,
+        t2,
         0,
         r,
-        -t,
+        -t2,
         0,
         r,
-        t,
+        t2,
         // (±1/φ, ±φ, 0)
         -r,
-        -t,
+        -t2,
         0,
         -r,
-        t,
+        t2,
         0,
         r,
-        -t,
+        -t2,
         0,
         r,
-        t,
+        t2,
         0,
         // (±φ, 0, ±1/φ)
-        -t,
+        -t2,
         0,
         -r,
-        t,
+        t2,
         0,
         -r,
-        -t,
+        -t2,
         0,
         r,
-        t,
+        t2,
         0,
         r
       ];
@@ -22864,9 +22864,9 @@
           verticesMovements = verticesMovements.concat(oneHoleMovements);
         }
         for (let b = 0; b < bevelSegments; b++) {
-          const t = b / bevelSegments;
-          const z = bevelThickness * Math.cos(t * Math.PI / 2);
-          const bs2 = bevelSize * Math.sin(t * Math.PI / 2) + bevelOffset;
+          const t2 = b / bevelSegments;
+          const z = bevelThickness * Math.cos(t2 * Math.PI / 2);
+          const bs2 = bevelSize * Math.sin(t2 * Math.PI / 2) + bevelOffset;
           for (let i = 0, il = contour.length; i < il; i++) {
             const vert = scalePt2(contour[i], contourMovements[i], bs2);
             v(vert.x, vert.y, -z);
@@ -22906,9 +22906,9 @@
           }
         }
         for (let b = bevelSegments - 1; b >= 0; b--) {
-          const t = b / bevelSegments;
-          const z = bevelThickness * Math.cos(t * Math.PI / 2);
-          const bs2 = bevelSize * Math.sin(t * Math.PI / 2) + bevelOffset;
+          const t2 = b / bevelSegments;
+          const z = bevelThickness * Math.cos(t2 * Math.PI / 2);
+          const bs2 = bevelSize * Math.sin(t2 * Math.PI / 2) + bevelOffset;
           for (let i = 0, il = contour.length; i < il; i++) {
             const vert = scalePt2(contour[i], contourMovements[i], bs2);
             v(vert.x, vert.y, depth + z);
@@ -23107,42 +23107,42 @@
   }
   var IcosahedronGeometry = class _IcosahedronGeometry extends PolyhedronGeometry {
     constructor(radius = 1, detail = 0) {
-      const t = (1 + Math.sqrt(5)) / 2;
+      const t2 = (1 + Math.sqrt(5)) / 2;
       const vertices = [
         -1,
-        t,
+        t2,
         0,
         1,
-        t,
+        t2,
         0,
         -1,
-        -t,
+        -t2,
         0,
         1,
-        -t,
+        -t2,
         0,
         0,
         -1,
-        t,
+        t2,
         0,
         1,
-        t,
+        t2,
         0,
         -1,
-        -t,
+        -t2,
         0,
         1,
-        -t,
-        t,
+        -t2,
+        t2,
         0,
         -1,
-        t,
+        t2,
         0,
         1,
-        -t,
+        -t2,
         0,
         -1,
-        -t,
+        -t2,
         0,
         1
       ];
@@ -24597,17 +24597,17 @@
       this.settings = null;
       this.DefaultSettings_ = {};
     }
-    evaluate(t) {
+    evaluate(t2) {
       const pp = this.parameterPositions;
       let i1 = this._cachedIndex, t1 = pp[i1], t0 = pp[i1 - 1];
       validate_interval: {
         seek: {
           let right;
           linear_scan: {
-            forward_scan: if (!(t < t1)) {
+            forward_scan: if (!(t2 < t1)) {
               for (let giveUpAt = i1 + 2; ; ) {
                 if (t1 === void 0) {
-                  if (t < t0) break forward_scan;
+                  if (t2 < t0) break forward_scan;
                   i1 = pp.length;
                   this._cachedIndex = i1;
                   return this.copySampleValue_(i1 - 1);
@@ -24615,16 +24615,16 @@
                 if (i1 === giveUpAt) break;
                 t0 = t1;
                 t1 = pp[++i1];
-                if (t < t1) {
+                if (t2 < t1) {
                   break seek;
                 }
               }
               right = pp.length;
               break linear_scan;
             }
-            if (!(t >= t0)) {
+            if (!(t2 >= t0)) {
               const t1global = pp[1];
-              if (t < t1global) {
+              if (t2 < t1global) {
                 i1 = 2;
                 t0 = t1global;
               }
@@ -24636,7 +24636,7 @@
                 if (i1 === giveUpAt) break;
                 t1 = t0;
                 t0 = pp[--i1 - 1];
-                if (t >= t0) {
+                if (t2 >= t0) {
                   break seek;
                 }
               }
@@ -24648,7 +24648,7 @@
           }
           while (i1 < right) {
             const mid = i1 + right >>> 1;
-            if (t < pp[mid]) {
+            if (t2 < pp[mid]) {
               right = mid;
             } else {
               i1 = mid + 1;
@@ -24669,7 +24669,7 @@
         this._cachedIndex = i1;
         this.intervalChanged_(i1, t0, t1);
       }
-      return this.interpolate_(i1, t0, t, t1);
+      return this.interpolate_(i1, t0, t2, t1);
     }
     getSettings_() {
       return this.settings || this.DefaultSettings_;
@@ -24739,8 +24739,8 @@
       this._offsetPrev = iPrev * stride;
       this._offsetNext = iNext * stride;
     }
-    interpolate_(i1, t0, t, t1) {
-      const result = this.resultBuffer, values = this.sampleValues, stride = this.valueSize, o1 = i1 * stride, o0 = o1 - stride, oP = this._offsetPrev, oN = this._offsetNext, wP = this._weightPrev, wN = this._weightNext, p = (t - t0) / (t1 - t0), pp = p * p, ppp = pp * p;
+    interpolate_(i1, t0, t2, t1) {
+      const result = this.resultBuffer, values = this.sampleValues, stride = this.valueSize, o1 = i1 * stride, o0 = o1 - stride, oP = this._offsetPrev, oN = this._offsetNext, wP = this._weightPrev, wN = this._weightNext, p = (t2 - t0) / (t1 - t0), pp = p * p, ppp = pp * p;
       const sP = -wP * ppp + 2 * wP * pp - wP * p;
       const s0 = (1 + wP) * ppp + (-1.5 - 2 * wP) * pp + (-0.5 + wP) * p + 1;
       const s1 = (-1 - wN) * ppp + (1.5 + wN) * pp + 0.5 * p;
@@ -24755,8 +24755,8 @@
     constructor(parameterPositions, sampleValues, sampleSize, resultBuffer) {
       super(parameterPositions, sampleValues, sampleSize, resultBuffer);
     }
-    interpolate_(i1, t0, t, t1) {
-      const result = this.resultBuffer, values = this.sampleValues, stride = this.valueSize, offset1 = i1 * stride, offset0 = offset1 - stride, weight1 = (t - t0) / (t1 - t0), weight0 = 1 - weight1;
+    interpolate_(i1, t0, t2, t1) {
+      const result = this.resultBuffer, values = this.sampleValues, stride = this.valueSize, offset1 = i1 * stride, offset0 = offset1 - stride, weight1 = (t2 - t0) / (t1 - t0), weight0 = 1 - weight1;
       for (let i = 0; i !== stride; ++i) {
         result[i] = values[offset0 + i] * weight0 + values[offset1 + i] * weight1;
       }
@@ -25015,8 +25015,8 @@
     constructor(parameterPositions, sampleValues, sampleSize, resultBuffer) {
       super(parameterPositions, sampleValues, sampleSize, resultBuffer);
     }
-    interpolate_(i1, t0, t, t1) {
-      const result = this.resultBuffer, values = this.sampleValues, stride = this.valueSize, alpha = (t - t0) / (t1 - t0);
+    interpolate_(i1, t0, t2, t1) {
+      const result = this.resultBuffer, values = this.sampleValues, stride = this.valueSize, alpha = (t2 - t0) / (t1 - t0);
       let offset = i1 * stride;
       for (let end = offset + stride; offset !== end; offset += 4) {
         Quaternion.slerpFlat(result, 0, values, offset - stride, values, offset, alpha);
@@ -28026,32 +28026,32 @@
       }
     }
     // mix functions
-    _select(buffer, dstOffset, srcOffset, t, stride) {
-      if (t >= 0.5) {
+    _select(buffer, dstOffset, srcOffset, t2, stride) {
+      if (t2 >= 0.5) {
         for (let i = 0; i !== stride; ++i) {
           buffer[dstOffset + i] = buffer[srcOffset + i];
         }
       }
     }
-    _slerp(buffer, dstOffset, srcOffset, t) {
-      Quaternion.slerpFlat(buffer, dstOffset, buffer, dstOffset, buffer, srcOffset, t);
+    _slerp(buffer, dstOffset, srcOffset, t2) {
+      Quaternion.slerpFlat(buffer, dstOffset, buffer, dstOffset, buffer, srcOffset, t2);
     }
-    _slerpAdditive(buffer, dstOffset, srcOffset, t, stride) {
+    _slerpAdditive(buffer, dstOffset, srcOffset, t2, stride) {
       const workOffset = this._workIndex * stride;
       Quaternion.multiplyQuaternionsFlat(buffer, workOffset, buffer, dstOffset, buffer, srcOffset);
-      Quaternion.slerpFlat(buffer, dstOffset, buffer, dstOffset, buffer, workOffset, t);
+      Quaternion.slerpFlat(buffer, dstOffset, buffer, dstOffset, buffer, workOffset, t2);
     }
-    _lerp(buffer, dstOffset, srcOffset, t, stride) {
-      const s = 1 - t;
+    _lerp(buffer, dstOffset, srcOffset, t2, stride) {
+      const s = 1 - t2;
       for (let i = 0; i !== stride; ++i) {
         const j = dstOffset + i;
-        buffer[j] = buffer[j] * s + buffer[srcOffset + i] * t;
+        buffer[j] = buffer[j] * s + buffer[srcOffset + i] * t2;
       }
     }
-    _lerpAdditive(buffer, dstOffset, srcOffset, t, stride) {
+    _lerpAdditive(buffer, dstOffset, srcOffset, t2, stride) {
       for (let i = 0; i !== stride; ++i) {
         const j = dstOffset + i;
-        buffer[j] = buffer[j] + buffer[srcOffset + i] * t;
+        buffer[j] = buffer[j] + buffer[srcOffset + i] * t2;
       }
     }
   };
@@ -29684,23 +29684,23 @@
     distance() {
       return this.start.distanceTo(this.end);
     }
-    at(t, target) {
-      return this.delta(target).multiplyScalar(t).add(this.start);
+    at(t2, target) {
+      return this.delta(target).multiplyScalar(t2).add(this.start);
     }
     closestPointToPointParameter(point, clampToLine) {
       _startP.subVectors(point, this.start);
       _startEnd.subVectors(this.end, this.start);
       const startEnd2 = _startEnd.dot(_startEnd);
       const startEnd_startP = _startEnd.dot(_startP);
-      let t = startEnd_startP / startEnd2;
+      let t2 = startEnd_startP / startEnd2;
       if (clampToLine) {
-        t = clamp(t, 0, 1);
+        t2 = clamp(t2, 0, 1);
       }
-      return t;
+      return t2;
     }
     closestPointToPoint(point, clampToLine, target) {
-      const t = this.closestPointToPointParameter(point, clampToLine);
-      return this.delta(target).multiplyScalar(t).add(this.start);
+      const t2 = this.closestPointToPointParameter(point, clampToLine);
+      return this.delta(target).multiplyScalar(t2).add(this.start);
     }
     applyMatrix4(matrix) {
       this.start.applyMatrix4(matrix);
@@ -31498,9 +31498,9 @@
     const dx = bx - ax, dz = bz - az;
     const l2 = dx * dx + dz * dz;
     if (l2 === 0) return Math.hypot(x - ax, z - az);
-    let t = ((x - ax) * dx + (z - az) * dz) / l2;
-    t = Math.max(0, Math.min(1, t));
-    return Math.hypot(x - (ax + t * dx), z - (az + t * dz));
+    let t2 = ((x - ax) * dx + (z - az) * dz) / l2;
+    t2 = Math.max(0, Math.min(1, t2));
+    return Math.hypot(x - (ax + t2 * dx), z - (az + t2 * dz));
   }
   function pointInPolygon(points, x, z) {
     let inside = false;
@@ -31765,6 +31765,252 @@
     return { canvas: out, mpp, worldX: worldBBox.minX, worldZ: worldBBox.minZ };
   }
 
+  // i18n.js
+  var DICT = {
+    zh: {
+      title: "\u91C7\u5149\u6A21\u62DF",
+      "mode.building": "\u753B\u697C",
+      "mode.wall": "\u753B\u56F4\u5899",
+      "mode.drag": "\u62D6\u62FD",
+      "bg.load": "\u5E95\u56FE",
+      "bg.rectify": "\u6821\u6B63",
+      "bg.lock": "\u{1F512} \u9501\u5E95\u56FE",
+      "bg.unlock": "\u{1F513} \u89E3\u9501\u5E95\u56FE",
+      "bg.del": "\u5220\u9664\u5E95\u56FE",
+      "view.reset": "\u590D\u4F4D\u89C6\u56FE",
+      help: "\u{1F4D6} \u8BF4\u660E",
+      save: "\u4FDD\u5B58",
+      export: "\u5BFC\u51FA",
+      import: "\u5BFC\u5165",
+      "plan.title": "2D \u7F16\u8F91\u5668",
+      "plan.hint": "\u70B9\u51FB\u52A0\u70B9 \xB7 \u56DE\u8F66/\u53F3\u952E\u5B8C\u6210 \xB7 \u957F\u6309\u53F3\u952E\u62D6\u62FD \xB7 \u9000\u683C\u64A4\u9500",
+      "plan.fullscreen": "\u5168\u5C4F",
+      "plan.restore": "\u8FD8\u539F",
+      "sec.bounds": "\u573A\u666F\u8303\u56F4",
+      "geo.ph": "\u6BCF\u884C\u4E00\u4E2A\u70B9\uFF1A\u7EAC\u5EA6,\u7ECF\u5EA6\n39.9100, 116.3900\n39.9100, 116.4050\n39.9200, 116.4050",
+      "geo.draw": "\u753B\u8303\u56F4\uFF08\u5E76\u8BBE\u7EAC\u5EA6\uFF09",
+      "sec.sun": "\u592A\u9633",
+      "sec.analysis": "\u65E5\u7167\u5206\u6790",
+      "sec.buildings": "\u697C\u680B",
+      "analysis.hint1": "\u6309\u300C\u592A\u9633\u300D\u9762\u677F\u6240\u9009\u65E5\u671F\uFF0C\u7EDF\u8BA1\u771F\u592A\u9633\u65F6 8:00\u201316:00 \u5404\u7ACB\u9762\u65E5\u7167\u65F6\u6570\uFF08\u8FBE\u6807\u7EBF 2h\uFF09\u3002",
+      "analysis.hint2": "3D \u70B9\u51FB\u697C\u7ACB\u9762\u53EF\u589E\u51CF\u5206\u6790\u9762\uFF08\u9ED8\u8BA4\u5357\u9762\uFF09\u3002",
+      "analysis.run": "\u65E5\u7167\u5206\u6790",
+      "analysis.clear": "\u6E05\u9664\u70ED\u529B\u56FE",
+      "analysis.computing": "\u65E5\u7167\u5206\u6790\u8BA1\u7B97\u4E2D\u2026",
+      "analysis.needBuilding": "\u8BF7\u5148\u753B\u697C",
+      "analysis.noFace": "\u65E0\u9009\u4E2D\u7ACB\u9762\uFF083D \u70B9\u51FB\u697C\u7ACB\u9762\u9009\u62E9\uFF09",
+      "analysis.pass": (p, t2) => `\u8FBE\u6807 ${p}/${t2} \u5C42`,
+      // 太阳控件
+      "ctl.lat": "\u7EAC\u5EA6",
+      "ctl.lon": "\u7ECF\u5EA6",
+      "ctl.date": "\u65E5\u671F",
+      "ctl.time": "\u65F6\u95F4",
+      "ctl.winter": "\u51AC\u81F3",
+      "ctl.equinox": "\u6625/\u79CB\u5206",
+      "ctl.summer": "\u590F\u81F3",
+      "ctl.play": "\u25B6 \u64AD\u653E",
+      "ctl.pause": "\u23F8 \u6682\u505C",
+      "ctl.speed": "\u64AD\u653E\u901F\u5EA6",
+      // 列表
+      "list.buildings": "\u697C",
+      "list.walls": "\u56F4\u5899",
+      "list.fh": "\u5C42\u9AD8",
+      "list.fc": "\u5C42\u6570",
+      "list.h": "\u9AD8",
+      "list.t": "\u539A",
+      "list.del": "\u5220",
+      // 楼/墙设置
+      "bld.title": "\u697C\u8BBE\u7F6E",
+      "bld.name": "\u540D\u79F0",
+      "bld.fh": "\u5C42\u9AD8",
+      "bld.fc": "\u5C42\u6570",
+      "bld.perFloor": "\u9010\u5C42\u5C42\u9AD8",
+      "bld.floorN": (n) => `\u7B2C${n}\u5C42`,
+      "bld.del": "\u5220\u9664",
+      "bld.close": "\u53D6\u6D88\u9009\u4E2D",
+      "wall.title": "\u56F4\u5899\u8BBE\u7F6E",
+      "wall.h": "\u5899\u9AD8",
+      "wall.t": "\u5899\u539A",
+      // 弹窗
+      "dlg.newBld": "\u65B0\u5EFA\u697C",
+      "dlg.newRect": "\u65B0\u5EFA\u77E9\u5F62\u697C",
+      "dlg.newWall": "\u65B0\u5EFA\u56F4\u5899",
+      "dlg.fhM": "\u5C42\u9AD8(\u7C73)",
+      "dlg.fc": "\u5C42\u6570",
+      "dlg.whM": "\u5899\u9AD8(\u7C73)",
+      "dlg.wtM": "\u5899\u539A(\u7C73)",
+      "dlg.cancel": "\u53D6\u6D88",
+      "dlg.ok": "\u786E\u5B9A",
+      "dlg.delete": "\u5220\u9664",
+      "dlg.delBld": "\u5220\u9664\u697C\u680B",
+      "dlg.delBldMsg": (n) => `\u786E\u5B9A\u5220\u9664\u300C${n}\u300D\uFF1F`,
+      "dlg.delWall": "\u5220\u9664\u56F4\u5899",
+      "dlg.delWallMsg": "\u786E\u5B9A\u5220\u9664\u8BE5\u56F4\u5899\uFF1F",
+      "dlg.calibN": (k) => `\u6807\u5B9A\u70B9 ${k}/4`,
+      "dlg.lat": "\u7EAC\u5EA6",
+      "dlg.lon": "\u7ECF\u5EA6",
+      "dlg.coordsTitle": "\u8F93\u5165 4 \u70B9\u7ECF\u7EAC\u5EA6\uFF08\u6309\u70B9\u5E8F 1-4\uFF0C\u6BCF\u884C\uFF1A\u7EAC\u5EA6,\u7ECF\u5EA6\uFF09",
+      "dlg.calibFail": "\u6821\u6B63\u5931\u8D25",
+      "dlg.calibFailMsg": "4 \u70B9\u9000\u5316\uFF08\u591A\u70B9\u5171\u7EBF\uFF09\uFF0C\u8BF7\u91CD\u65B0\u6807\u5B9A",
+      "dlg.coordsBad": "\u8F93\u5165\u4E0D\u5B8C\u6574",
+      "dlg.coordsBadMsg": "\u9700 4 \u884C\uFF0C\u6BCF\u884C\uFF1A\u7EAC\u5EA6,\u7ECF\u5EA6",
+      "msg.noBg": "\u5F53\u524D\u6CA1\u6709\u5E95\u56FE",
+      "msg.unlockFirst": "\u8BF7\u5148\u89E3\u9501\u5E95\u56FE\uFF0C\u624D\u80FD\u5220\u9664",
+      "msg.loadBgFirst": "\u8BF7\u5148\u8F7D\u5165\u5E95\u56FE",
+      "msg.saved": "\u5DF2\u4FDD\u5B58\u5230\u672C\u5730",
+      "msg.imported": "\u5DF2\u5BFC\u5165",
+      "msg.saveFail": "\u4FDD\u5B58\u5931\u8D25",
+      "msg.importFail": "\u5BFC\u5165\u5931\u8D25",
+      "geo.tooFew": "\u81F3\u5C11 3 \u4E2A\u70B9\uFF08\u6BCF\u884C\uFF1A\u7EAC\u5EA6,\u7ECF\u5EA6\uFF09\u624D\u80FD\u56F4\u6210\u9762",
+      label: (s, step) => `\u6BD4\u4F8B ${s.toFixed(1)} px/m \xB7 \u7F51\u683C ${step}m`,
+      floorTag: (n, cnt, h) => `${n} ${cnt}\u5C42\xD7${h}m`.trim(),
+      nameFallback: (id) => id.slice(-4) + "\u53F7",
+      nameDefault: (i) => i + "\u53F7",
+      langBtn: "EN"
+    },
+    en: {
+      title: "Sunlight Sim",
+      "mode.building": "Building",
+      "mode.wall": "Wall",
+      "mode.drag": "Drag",
+      "bg.load": "Basemap",
+      "bg.rectify": "Rectify",
+      "bg.lock": "\u{1F512} Lock",
+      "bg.unlock": "\u{1F513} Unlock",
+      "bg.del": "Delete basemap",
+      "view.reset": "Reset view",
+      help: "\u{1F4D6} Help",
+      save: "Save",
+      export: "Export",
+      import: "Import",
+      "plan.title": "2D Editor",
+      "plan.hint": "Click to add \xB7 Enter/right-click to finish \xB7 hold right-drag to pan \xB7 Backspace to undo",
+      "plan.fullscreen": "Fullscreen",
+      "plan.restore": "Restore",
+      "sec.bounds": "Scene bounds",
+      "geo.ph": "One point per line: lat,lon\n39.9100, 116.3900\n39.9100, 116.4050\n39.9200, 116.4050",
+      "geo.draw": "Draw bounds (set latitude)",
+      "sec.sun": "Sun",
+      "sec.analysis": "Sunlight analysis",
+      "sec.buildings": "Buildings",
+      "analysis.hint1": "Uses the date in the Sun panel; accumulates facade sunlight hours in true solar time 08:00\u201316:00 (2h threshold).",
+      "analysis.hint2": "Click a building facade in 3D to add/remove analysis faces (south by default).",
+      "analysis.run": "Analyze",
+      "analysis.clear": "Clear heatmap",
+      "analysis.computing": "Computing sunlight\u2026",
+      "analysis.needBuilding": "Draw a building first",
+      "analysis.noFace": "No facade selected (click a building facade in 3D)",
+      "analysis.pass": (p, t2) => `${p}/${t2} floors pass`,
+      "ctl.lat": "Lat",
+      "ctl.lon": "Lon",
+      "ctl.date": "Date",
+      "ctl.time": "Time",
+      "ctl.winter": "Winter sol.",
+      "ctl.equinox": "Equinox",
+      "ctl.summer": "Summer sol.",
+      "ctl.play": "\u25B6 Play",
+      "ctl.pause": "\u23F8 Pause",
+      "ctl.speed": "Playback speed",
+      "list.buildings": "Buildings",
+      "list.walls": "Walls",
+      "list.fh": "Fl.H",
+      "list.fc": "Floors",
+      "list.h": "H",
+      "list.t": "T",
+      "list.del": "Del",
+      "bld.title": "Building",
+      "bld.name": "Name",
+      "bld.fh": "Fl. height",
+      "bld.fc": "Floors",
+      "bld.perFloor": "Per-floor height",
+      "bld.floorN": (n) => `Floor ${n}`,
+      "bld.del": "Delete",
+      "bld.close": "Deselect",
+      "wall.title": "Wall",
+      "wall.h": "Height",
+      "wall.t": "Thickness",
+      "dlg.newBld": "New building",
+      "dlg.newRect": "New rectangular building",
+      "dlg.newWall": "New wall",
+      "dlg.fhM": "Floor height (m)",
+      "dlg.fc": "Floors",
+      "dlg.whM": "Wall height (m)",
+      "dlg.wtM": "Wall thickness (m)",
+      "dlg.cancel": "Cancel",
+      "dlg.ok": "OK",
+      "dlg.delete": "Delete",
+      "dlg.delBld": "Delete building",
+      "dlg.delBldMsg": (n) => `Delete "${n}"?`,
+      "dlg.delWall": "Delete wall",
+      "dlg.delWallMsg": "Delete this wall?",
+      "dlg.calibN": (k) => `Control point ${k}/4`,
+      "dlg.lat": "Latitude",
+      "dlg.lon": "Longitude",
+      "dlg.coordsTitle": "Enter lat/lon for 4 points (order 1\u20134, one per line: lat,lon)",
+      "dlg.calibFail": "Rectification failed",
+      "dlg.calibFailMsg": "4 points are degenerate (collinear); please re-mark",
+      "dlg.coordsBad": "Incomplete input",
+      "dlg.coordsBadMsg": "Need 4 lines, each: lat,lon",
+      "msg.noBg": "No basemap loaded",
+      "msg.unlockFirst": "Unlock the basemap before deleting",
+      "msg.loadBgFirst": "Load a basemap first",
+      "msg.saved": "Saved locally",
+      "msg.imported": "Imported",
+      "msg.saveFail": "Save failed",
+      "msg.importFail": "Import failed",
+      "geo.tooFew": "At least 3 points (each line: lat,lon) are needed",
+      label: (s, step) => `Scale ${s.toFixed(1)} px/m \xB7 Grid ${step}m`,
+      floorTag: (n, cnt, h) => `${n} ${cnt}F\xD7${h}m`.trim(),
+      nameFallback: (id) => "No." + id.slice(-4),
+      nameDefault: (i) => "No." + i,
+      langBtn: "\u4E2D"
+    }
+  };
+  var lang = "zh";
+  try {
+    const s = localStorage.getItem("daylight-lang");
+    if (s === "zh" || s === "en") lang = s;
+  } catch (e) {
+  }
+  var subs = [];
+  function t(key, ...args) {
+    const v = (DICT[lang] && DICT[lang][key]) ?? DICT.zh[key];
+    return typeof v === "function" ? v(...args) : v ?? key;
+  }
+  function getLang() {
+    return lang;
+  }
+  function setLang(l) {
+    if (l !== "zh" && l !== "en") return;
+    lang = l;
+    try {
+      localStorage.setItem("daylight-lang", l);
+    } catch (e) {
+    }
+    document.documentElement.lang = l === "zh" ? "zh" : "en";
+    applyStatic();
+    subs.forEach((fn) => {
+      try {
+        fn();
+      } catch (e) {
+      }
+    });
+  }
+  function toggleLang() {
+    setLang(lang === "zh" ? "en" : "zh");
+  }
+  function onLangChange(fn) {
+    subs.push(fn);
+  }
+  function applyStatic() {
+    document.querySelectorAll("[data-i18n]").forEach((el2) => {
+      el2.textContent = t(el2.getAttribute("data-i18n"));
+    });
+    document.querySelectorAll("[data-i18n-ph]").forEach((el2) => {
+      el2.placeholder = t(el2.getAttribute("data-i18n-ph"));
+    });
+  }
+
   // modal.js
   var STYLE = `
   position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center;
@@ -31811,8 +32057,8 @@
         inputs[f.key] = inp;
       }
       const btns = el("div", "display:flex;justify-content:flex-end;gap:8px;margin-top:14px;");
-      const cancel = el("button", "padding:6px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#2a2d33;cursor:pointer;font-size:12px;", "\u53D6\u6D88");
-      const ok = el("button", "padding:6px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px;", "\u786E\u5B9A");
+      const cancel = el("button", "padding:6px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#2a2d33;cursor:pointer;font-size:12px;", t("dlg.cancel"));
+      const ok = el("button", "padding:6px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px;", t("dlg.ok"));
       btns.appendChild(cancel);
       btns.appendChild(ok);
       box.appendChild(btns);
@@ -31868,7 +32114,7 @@
       if (title) box.appendChild(el("div", "font-weight:600;font-size:14px;margin-bottom:8px;", title));
       box.appendChild(el("div", "color:#2a2d33;", message));
       const btns = el("div", "display:flex;justify-content:flex-end;margin-top:14px;");
-      const ok = el("button", "padding:6px 16px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px;", "\u786E\u5B9A");
+      const ok = el("button", "padding:6px 16px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px;", t("dlg.ok"));
       btns.appendChild(ok);
       box.appendChild(btns);
       overlay.appendChild(box);
@@ -31892,7 +32138,7 @@
       });
     });
   }
-  function confirmModal({ title, message, okText = "\u5220\u9664", danger = true }) {
+  function confirmModal({ title, message, okText, cancelText, danger = true }) {
     return new Promise((resolve) => {
       const overlay = el("div", STYLE);
       const box = el(
@@ -31902,9 +32148,9 @@
       if (title) box.appendChild(el("div", "font-weight:600;font-size:14px;margin-bottom:8px;", title));
       if (message) box.appendChild(el("div", "color:#2a2d33;", message));
       const btns = el("div", "display:flex;justify-content:flex-end;gap:8px;margin-top:14px;");
-      const cancel = el("button", "padding:6px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#2a2d33;cursor:pointer;font-size:12px;", "\u53D6\u6D88");
+      const cancel = el("button", "padding:6px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#2a2d33;cursor:pointer;font-size:12px;", cancelText || t("dlg.cancel"));
       const okBg = danger ? "#b3261e" : "#2b5f8a";
-      const ok = el("button", `padding:6px 12px;border:1px solid ${okBg};border-radius:4px;background:${okBg};color:#fff;cursor:pointer;font-size:12px;`, okText);
+      const ok = el("button", `padding:6px 12px;border:1px solid ${okBg};border-radius:4px;background:${okBg};color:#fff;cursor:pointer;font-size:12px;`, okText || t("dlg.delete"));
       btns.appendChild(cancel);
       btns.appendChild(ok);
       box.appendChild(btns);
@@ -32009,39 +32255,39 @@
     selPanel.id = "bld-settings";
     selPanel.style.cssText = "position:absolute;top:8px;right:8px;background:#fff;border:1px solid #e6e4de;padding:10px;font:12px sans-serif;display:none;z-index:5;border-radius:8px;width:200px;box-shadow:0 6px 24px rgba(42,45,51,.18);color:#2a2d33;";
     selPanel.innerHTML = `
-    <div style="font-weight:600;font-size:13px;margin-bottom:8px">\u697C\u8BBE\u7F6E</div>
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px" data-i18n="bld.title">\u697C\u8BBE\u7F6E</div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">\u540D\u79F0</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="bld.name">\u540D\u79F0</label>
       <input id="bld-name" type="text" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px">
     </div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">\u5C42\u9AD8</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="bld.fh">\u5C42\u9AD8</label>
       <input id="bld-h" type="number" step="any" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px;min-width:0">
     </div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">\u5C42\u6570</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="bld.fc">\u5C42\u6570</label>
       <input id="bld-n" type="number" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px;min-width:0">
     </div>
     <div style="margin:8px 0 4px">
-      <div id="bld-floors-toggle" style="cursor:pointer;color:#2b5f8a;user-select:none">\u25B8 \u9010\u5C42\u5C42\u9AD8</div>
+      <div id="bld-floors-toggle" style="cursor:pointer;color:#2b5f8a;user-select:none">\u25B8 ${t("bld.perFloor")}</div>
       <div id="bld-floors" style="display:none;max-height:150px;overflow:auto;margin-top:4px"></div>
     </div>
     <div style="display:flex;gap:6px;margin-top:10px;justify-content:flex-end">
-      <button id="bld-del" style="padding:5px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#b3261e;cursor:pointer;font-size:12px">\u5220\u9664</button>
-      <button id="bld-close" style="padding:5px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px">\u53D6\u6D88\u9009\u4E2D</button>
+      <button id="bld-del" style="padding:5px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#b3261e;cursor:pointer;font-size:12px" data-i18n="bld.del">\u5220\u9664</button>
+      <button id="bld-close" style="padding:5px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px" data-i18n="bld.close">\u53D6\u6D88\u9009\u4E2D</button>
     </div>`;
     selPanel.querySelector("#bld-floors-toggle").onclick = () => {
       const d = selPanel.querySelector("#bld-floors");
       const open = d.style.display === "none";
       d.style.display = open ? "block" : "none";
-      selPanel.querySelector("#bld-floors-toggle").textContent = (open ? "\u25BE" : "\u25B8") + " \u9010\u5C42\u5C42\u9AD8";
+      selPanel.querySelector("#bld-floors-toggle").textContent = (open ? "\u25BE " : "\u25B8 ") + t("bld.perFloor");
     };
     selPanel.querySelector("#bld-close").onclick = () => clearSel();
     selPanel.querySelector("#bld-del").onclick = async () => {
       if (!selected) return;
       const b = state2.buildings.find((x) => x.id === selected);
-      const nm = b?.name || "\u8BE5\u697C";
-      if (!await confirmModal({ title: "\u5220\u9664\u697C\u680B", message: `\u786E\u5B9A\u5220\u9664\u300C${nm}\u300D\uFF1F` })) return;
+      const nm = b?.name || t("nameFallback", selected);
+      if (!await confirmModal({ title: t("dlg.delBld"), message: t("dlg.delBldMsg", nm) })) return;
       pushUndo();
       state2.buildings = state2.buildings.filter((x) => x.id !== selected);
       clearSel();
@@ -32053,23 +32299,23 @@
     wallPanel.id = "wall-settings";
     wallPanel.style.cssText = selPanel.style.cssText;
     wallPanel.innerHTML = `
-    <div style="font-weight:600;font-size:13px;margin-bottom:8px">\u56F4\u5899\u8BBE\u7F6E</div>
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px" data-i18n="wall.title">\u56F4\u5899\u8BBE\u7F6E</div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">\u5899\u9AD8</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="wall.h">\u5899\u9AD8</label>
       <input id="wall-h" type="number" step="any" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px;min-width:0">
     </div>
     <div style="display:flex;gap:4px;align-items:center;margin:6px 0">
-      <label style="flex:0 0 40px;color:#8a909b">\u5899\u539A</label>
+      <label style="flex:0 0 40px;color:#8a909b" data-i18n="wall.t">\u5899\u539A</label>
       <input id="wall-t" type="number" step="any" style="flex:1;padding:4px 6px;border:1px solid #e6e4de;border-radius:4px;font-size:12px;min-width:0">
     </div>
     <div style="display:flex;gap:6px;margin-top:10px;justify-content:flex-end">
-      <button id="wall-del" style="padding:5px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#b3261e;cursor:pointer;font-size:12px">\u5220\u9664</button>
-      <button id="wall-close" style="padding:5px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px">\u53D6\u6D88\u9009\u4E2D</button>
+      <button id="wall-del" style="padding:5px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#b3261e;cursor:pointer;font-size:12px" data-i18n="bld.del">\u5220\u9664</button>
+      <button id="wall-close" style="padding:5px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px" data-i18n="bld.close">\u53D6\u6D88\u9009\u4E2D</button>
     </div>`;
     wallPanel.querySelector("#wall-close").onclick = () => clearSel();
     wallPanel.querySelector("#wall-del").onclick = async () => {
       if (!selWall) return;
-      if (!await confirmModal({ title: "\u5220\u9664\u56F4\u5899", message: "\u786E\u5B9A\u5220\u9664\u8BE5\u56F4\u5899\uFF1F" })) return;
+      if (!await confirmModal({ title: t("dlg.delWall"), message: t("dlg.delWallMsg") })) return;
       pushUndo();
       state2.walls = state2.walls.filter((x) => x.id !== selWall);
       clearSel();
@@ -32091,9 +32337,9 @@
         }
       };
       wallPanel.querySelector("#wall-t").oninput = () => {
-        const t = parseFloat(wallPanel.querySelector("#wall-t").value);
-        if (t > 0) {
-          w.thickness = t;
+        const t2 = parseFloat(wallPanel.querySelector("#wall-t").value);
+        if (t2 > 0) {
+          w.thickness = t2;
           onChange();
         }
       };
@@ -32144,7 +32390,7 @@
       let html = "";
       for (let i = 0; i < b.floorCount; i++) {
         const v = b.overrides[i] ?? b.floorHeight;
-        html += `<div style="display:flex;gap:4px;align-items:center;margin:3px 0"><label style="flex:0 0 44px;color:#8a909b;font-size:11px">\u7B2C${i + 1}\u5C42</label><input data-fi="${i}" type="number" step="any" value="${v}" style="flex:1;padding:3px 5px;border:1px solid #e6e4de;border-radius:4px;font-size:11px;min-width:0"></div>`;
+        html += `<div style="display:flex;gap:4px;align-items:center;margin:3px 0"><label style="flex:0 0 44px;color:#8a909b;font-size:11px">${t("bld.floorN", i + 1)}</label><input data-fi="${i}" type="number" step="any" value="${v}" style="flex:1;padding:3px 5px;border:1px solid #e6e4de;border-radius:4px;font-size:11px;min-width:0"></div>`;
       }
       box.innerHTML = html;
       box.querySelectorAll("input[data-fi]").forEach((el2) => {
@@ -32247,7 +32493,7 @@
           ctx.fillStyle = "#333";
           ctx.font = "11px sans-serif";
           ctx.textAlign = "center";
-          ctx.fillText(`${b.name || ""} ${b.floorCount}\u5C42\xD7${b.floorHeight}m`.trim(), q.px, q.py - 14);
+          ctx.fillText(t("floorTag", b.name || "", b.floorCount, b.floorHeight), q.px, q.py - 14);
           const rp = worldToPx(view, c.x, c.z);
           const hx = rp.px, hy = rp.py - 30;
           ctx.fillStyle = "#fff";
@@ -32348,7 +32594,7 @@
       ctx.font = "11px sans-serif";
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
-      ctx.fillText(`\u6BD4\u4F8B ${view.scale.toFixed(1)} px/m \xB7 \u7F51\u683C ${step}m`, 6, 6);
+      ctx.fillText(t("label", view.scale, step), 6, 6);
     }
     function calibToCanvas(p) {
       const tl = worldToPx(view, bg.worldX, bg.worldZ);
@@ -32416,8 +32662,8 @@
       const w = pxToWorld(view, p.px, p.py);
       mouse = w;
       if (mode === "drag") {
-        const t = pickDragTarget(w.x, w.z);
-        canvas2.style.cursor = t ? "grab" : "default";
+        const t2 = pickDragTarget(w.x, w.z);
+        canvas2.style.cursor = t2 ? "grab" : "default";
         draw();
         return;
       }
@@ -32659,8 +32905,8 @@
       }
     });
     window.addEventListener("keydown", (e) => {
-      const t = document.activeElement;
-      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+      const t2 = document.activeElement;
+      if (t2 && (t2.tagName === "INPUT" || t2.tagName === "TEXTAREA")) return;
       const ctrl = e.ctrlKey || e.metaKey;
       if (ctrl && e.key.toLowerCase() === "z" && e.shiftKey) {
         e.preventDefault();
@@ -32703,10 +32949,10 @@
     });
     async function finishRect(x1, z1, x2, z2) {
       const r = await promptModal({
-        title: "\u65B0\u5EFA\u77E9\u5F62\u697C",
+        title: t("dlg.newRect"),
         fields: [
-          { key: "h", label: "\u5C42\u9AD8(\u7C73)", type: "number", value: 3, step: "any" },
-          { key: "n", label: "\u5C42\u6570", type: "number", value: 6 }
+          { key: "h", label: t("dlg.fhM"), type: "number", value: 3, step: "any" },
+          { key: "n", label: t("dlg.fc"), type: "number", value: 6 }
         ]
       });
       if (!r) {
@@ -32721,7 +32967,7 @@
       const minZ = Math.min(z1, z2), maxZ = Math.max(z1, z2);
       state2.buildings.push({
         id: "b" + Date.now(),
-        name: state2.buildings.length + 1 + "\u53F7",
+        name: t("nameDefault", state2.buildings.length + 1),
         footprint: [[minX, minZ], [maxX, minZ], [maxX, maxZ], [minX, maxZ]],
         floorHeight: h,
         floorCount: n,
@@ -32738,10 +32984,10 @@
       if (mode === "building") {
         if (clean.length >= 3) {
           const r = await promptModal({
-            title: "\u65B0\u5EFA\u697C",
+            title: t("dlg.newBld"),
             fields: [
-              { key: "h", label: "\u5C42\u9AD8(\u7C73)", type: "number", value: 3, step: "any" },
-              { key: "n", label: "\u5C42\u6570", type: "number", value: 6 }
+              { key: "h", label: t("dlg.fhM"), type: "number", value: 3, step: "any" },
+              { key: "n", label: t("dlg.fc"), type: "number", value: 6 }
             ]
           });
           if (!r) {
@@ -32753,7 +32999,7 @@
           const h = r.h || 3, n = Math.round(r.n) || 6;
           state2.buildings.push({
             id: "b" + Date.now(),
-            name: state2.buildings.length + 1 + "\u53F7",
+            name: t("nameDefault", state2.buildings.length + 1),
             footprint: clean.map((p) => [p.x, p.z]),
             floorHeight: h,
             floorCount: n,
@@ -32764,10 +33010,10 @@
       } else {
         if (clean.length >= 2) {
           const r = await promptModal({
-            title: "\u65B0\u5EFA\u56F4\u5899",
+            title: t2("dlg.newWall"),
             fields: [
-              { key: "h", label: "\u5899\u9AD8(\u7C73)", type: "number", value: 2.5, step: "0.1" },
-              { key: "t", label: "\u5899\u539A(\u7C73)", type: "number", value: 0.4, step: "0.1" }
+              { key: "h", label: t2("dlg.whM"), type: "number", value: 2.5, step: "0.1" },
+              { key: "t", label: t2("dlg.wtM"), type: "number", value: 0.4, step: "0.1" }
             ]
           });
           if (!r) {
@@ -32776,12 +33022,12 @@
             return;
           }
           pushUndo();
-          const h = r.h || 2.5, t = r.t || 0.4;
+          const h = r.h || 2.5, t2 = r.t || 0.4;
           state2.walls.push({
             id: "w" + Date.now(),
             path: clean.map((p) => [p.x, p.z]),
             height: h,
-            thickness: t
+            thickness: t2
           });
           added = true;
         }
@@ -32811,7 +33057,7 @@
     async function promptCalibCoords() {
       const preset = calibPts.map((p) => Number.isFinite(p.lat) && Number.isFinite(p.lon) ? `${p.lat}, ${p.lon}` : "").join("\n");
       const r = await promptModal({
-        title: "\u8F93\u5165 4 \u70B9\u7ECF\u7EAC\u5EA6\uFF08\u6309\u70B9\u5E8F 1-4\uFF0C\u6BCF\u884C\uFF1A\u7EAC\u5EA6,\u7ECF\u5EA6\uFF09",
+        title: t("dlg.coordsTitle"),
         fields: [{
           key: "coords",
           type: "textarea",
@@ -32826,7 +33072,7 @@
       }
       const rows = r.coords.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => l.split(/[,\s]+/).map(Number));
       if (rows.length !== 4 || rows.some((a) => a.length < 2 || a.slice(0, 2).some(Number.isNaN))) {
-        await alertModal({ title: "\u8F93\u5165\u4E0D\u5B8C\u6574", message: "\u9700 4 \u884C\uFF0C\u6BCF\u884C\uFF1A\u7EAC\u5EA6,\u7ECF\u5EA6" });
+        await alertModal({ title: t("dlg.coordsBad"), message: t("dlg.coordsBadMsg") });
         promptCalibCoords();
         return;
       }
@@ -32846,7 +33092,7 @@
       const geo = geoPointsToWorld(calibPts.map((p) => ({ lat: p.lat, lon: p.lon })));
       const H = solveHomography(srcPts, geo.world);
       if (!H) {
-        await alertModal({ title: "\u6821\u6B63\u5931\u8D25", message: "4 \u70B9\u9000\u5316\uFF08\u591A\u70B9\u5171\u7EBF\uFF09\uFF0C\u8BF7\u91CD\u65B0\u6807\u5B9A" });
+        await alertModal({ title: t("dlg.calibFail"), message: t("dlg.calibFailMsg") });
         resetCalib();
         setMode("drag");
         return;
@@ -32903,6 +33149,13 @@
       draw();
     }
     draw();
+    onLangChange(() => {
+      if (selected) {
+        const b = state2.buildings.find((x) => x.id === selected);
+        if (b) renderFloorRows(b);
+      }
+      draw();
+    });
     return { setMode, redraw: draw, loadImage, resetView, fitToBoundary, undo, redo, pushUndo, resizeCanvas, resizeBg, setBgMpp, clearBg, setHover, hasBg, startCalibrate };
   }
 
@@ -32913,102 +33166,117 @@
     return Math.floor((cur - start) / 864e5) + 1;
   }
   function initControls({ container, state: state2, onChange }) {
-    container.innerHTML = `
-    <div class="row"><label id="c-lat-l">\u7EAC\u5EA6 ${state2.lat}\xB0</label>
-      <button class="nudge" data-t="c-lat" data-d="-0.1" style="padding:2px 6px">\u2212</button>
-      <input id="c-lat" type="range" min="-66" max="66" step="0.1" value="${state2.lat}">
-      <button class="nudge" data-t="c-lat" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
-    <div class="row"><label id="c-lon-l">\u7ECF\u5EA6 ${state2.lon}\xB0</label>
-      <button class="nudge" data-t="c-lon" data-d="-0.1" style="padding:2px 6px">\u2212</button>
-      <input id="c-lon" type="range" min="-180" max="180" step="0.1" value="${state2.lon}">
-      <button class="nudge" data-t="c-lon" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
-    <div class="row"><label>\u65E5\u671F</label>
-      <input id="c-date" type="date" value="2026-12-21"></div>
-    <div class="row"><label id="c-time-l">\u65F6\u95F4 ${state2.time}h</label>
-      <button class="nudge" data-t="c-time" data-d="-0.1" style="padding:2px 6px">\u2212</button>
-      <input id="c-time" type="range" min="0" max="24" step="0.1" value="${state2.time}">
-      <button class="nudge" data-t="c-time" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
-    <div class="row" style="gap:3px">
-      <button id="c-winter" style="padding:4px 6px">\u51AC\u81F3</button>
-      <button id="c-equinox" style="padding:4px 6px">\u6625/\u79CB\u5206</button>
-      <button id="c-summer" style="padding:4px 6px">\u590F\u81F3</button>
-      <select id="c-speed" style="margin-left:auto;padding:3px 4px" title="\u64AD\u653E\u901F\u5EA6">
-        <option value="0.1">0.1\xD7</option>
-        <option value="0.5">0.5\xD7</option>
-        <option value="1" selected>1\xD7</option>
-        <option value="2">2\xD7</option>
-        <option value="4">4\xD7</option>
-        <option value="8">8\xD7</option>
-      </select>
-      <button id="c-play" style="padding:4px 8px">\u25B6 \u64AD\u653E</button>
-    </div>
-  `;
+    let curDate = "2026-12-21";
+    let season = null;
     const $ = (id) => container.querySelector(id);
-    state2.tzMeridian = Math.round(state2.lon / 15) * 15;
+    function render2() {
+      container.innerHTML = `
+      <div class="row"><label id="c-lat-l">${t("ctl.lat")} ${state2.lat}\xB0</label>
+        <button class="nudge" data-t="c-lat" data-d="-0.1" style="padding:2px 6px">\u2212</button>
+        <input id="c-lat" type="range" min="-66" max="66" step="0.1" value="${state2.lat}">
+        <button class="nudge" data-t="c-lat" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
+      <div class="row"><label id="c-lon-l">${t("ctl.lon")} ${state2.lon}\xB0</label>
+        <button class="nudge" data-t="c-lon" data-d="-0.1" style="padding:2px 6px">\u2212</button>
+        <input id="c-lon" type="range" min="-180" max="180" step="0.1" value="${state2.lon}">
+        <button class="nudge" data-t="c-lon" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
+      <div class="row"><label>${t("ctl.date")}</label>
+        <input id="c-date" type="date" value="${curDate}"></div>
+      <div class="row"><label id="c-time-l">${t("ctl.time")} ${state2.time}h</label>
+        <button class="nudge" data-t="c-time" data-d="-0.1" style="padding:2px 6px">\u2212</button>
+        <input id="c-time" type="range" min="0" max="24" step="0.1" value="${state2.time}">
+        <button class="nudge" data-t="c-time" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
+      <div class="row" style="gap:3px">
+        <button id="c-winter" style="padding:4px 6px">${t("ctl.winter")}</button>
+        <button id="c-equinox" style="padding:4px 6px">${t("ctl.equinox")}</button>
+        <button id="c-summer" style="padding:4px 6px">${t("ctl.summer")}</button>
+        <select id="c-speed" style="margin-left:auto;padding:3px 4px" title="${t("ctl.speed")}">
+          <option value="0.1">0.1\xD7</option>
+          <option value="0.5">0.5\xD7</option>
+          <option value="1">1\xD7</option>
+          <option value="2">2\xD7</option>
+          <option value="4">4\xD7</option>
+          <option value="8">8\xD7</option>
+        </select>
+        <button id="c-play" style="padding:4px 8px">${state2.playing ? t("ctl.pause") : t("ctl.play")}</button>
+      </div>
+    `;
+      $("#c-speed").value = String(state2.playSpeed || 1);
+      wire();
+    }
     function syncDate() {
       const [y, m, d] = $("#c-date").value.split("-").map(Number);
       state2.dayOfYear = dateToDayOfYear(y, m, d);
     }
-    syncDate();
-    $("#c-lat").oninput = (e) => {
-      state2.lat = +e.target.value;
-      $("#c-lat-l").textContent = "\u7EAC\u5EA6 " + e.target.value + "\xB0";
-      onChange();
-    };
-    $("#c-lon").oninput = (e) => {
-      state2.lon = +e.target.value;
-      state2.tzMeridian = Math.round(state2.lon / 15) * 15;
-      $("#c-lon-l").textContent = "\u7ECF\u5EA6 " + e.target.value + "\xB0";
-      onChange();
-    };
-    $("#c-date").oninput = () => {
-      syncDate();
-      clearSeason();
-      onChange();
-    };
-    $("#c-time").oninput = (e) => {
-      state2.time = +e.target.value;
-      $("#c-time-l").textContent = "\u65F6\u95F4 " + e.target.value + "h";
-      onChange();
-    };
-    const seasonBtns = ["c-winter", "c-equinox", "c-summer"];
     function setSeason(active) {
-      for (const k of seasonBtns) $("#" + k).classList.toggle("active", k === active);
+      season = active;
+      for (const k of ["c-winter", "c-equinox", "c-summer"]) $("#" + k).classList.toggle("active", k === active);
     }
     function clearSeason() {
       setSeason(null);
     }
     const setDate = (v) => {
+      curDate = v;
       $("#c-date").value = v;
       syncDate();
       onChange();
     };
-    $("#c-winter").onclick = () => {
-      setDate("2026-12-21");
-      setSeason("c-winter");
-    };
-    $("#c-equinox").onclick = () => {
-      setDate("2026-03-21");
-      setSeason("c-equinox");
-    };
-    $("#c-summer").onclick = () => {
-      setDate("2026-06-21");
-      setSeason("c-summer");
-    };
-    $("#c-play").onclick = () => {
-      state2.playing = !state2.playing;
-      $("#c-play").textContent = state2.playing ? "\u23F8 \u6682\u505C" : "\u25B6 \u64AD\u653E";
-    };
-    $("#c-speed").onchange = (e) => {
-      state2.playSpeed = parseFloat(e.target.value) || 1;
-    };
-    container.querySelectorAll(".nudge").forEach((btn) => {
-      btn.onclick = () => {
-        const slider = $("#" + btn.dataset.t);
-        const d = parseFloat(btn.dataset.d);
-        slider.value = Math.max(+slider.min, Math.min(+slider.max, +slider.value + d));
-        slider.dispatchEvent(new Event("input", { bubbles: true }));
+    function wire() {
+      state2.tzMeridian = Math.round(state2.lon / 15) * 15;
+      syncDate();
+      $("#c-lat").oninput = (e) => {
+        state2.lat = +e.target.value;
+        $("#c-lat-l").textContent = t("ctl.lat") + " " + e.target.value + "\xB0";
+        onChange();
       };
+      $("#c-lon").oninput = (e) => {
+        state2.lon = +e.target.value;
+        state2.tzMeridian = Math.round(state2.lon / 15) * 15;
+        $("#c-lon-l").textContent = t("ctl.lon") + " " + e.target.value + "\xB0";
+        onChange();
+      };
+      $("#c-date").oninput = () => {
+        curDate = $("#c-date").value;
+        syncDate();
+        clearSeason();
+        onChange();
+      };
+      $("#c-time").oninput = (e) => {
+        state2.time = +e.target.value;
+        $("#c-time-l").textContent = t("ctl.time") + " " + e.target.value + "h";
+        onChange();
+      };
+      $("#c-winter").onclick = () => {
+        setDate("2026-12-21");
+        setSeason("c-winter");
+      };
+      $("#c-equinox").onclick = () => {
+        setDate("2026-03-21");
+        setSeason("c-equinox");
+      };
+      $("#c-summer").onclick = () => {
+        setDate("2026-06-21");
+        setSeason("c-summer");
+      };
+      $("#c-play").onclick = () => {
+        state2.playing = !state2.playing;
+        $("#c-play").textContent = state2.playing ? t("ctl.pause") : t("ctl.play");
+      };
+      $("#c-speed").onchange = (e) => {
+        state2.playSpeed = parseFloat(e.target.value) || 1;
+      };
+      container.querySelectorAll(".nudge").forEach((btn) => {
+        btn.onclick = () => {
+          const slider = $("#" + btn.dataset.t);
+          const d = parseFloat(btn.dataset.d);
+          slider.value = Math.max(+slider.min, Math.min(+slider.max, +slider.value + d));
+          slider.dispatchEvent(new Event("input", { bubbles: true }));
+        };
+      });
+    }
+    render2();
+    onLangChange(() => {
+      render2();
+      if (season) setSeason(season);
     });
   }
 
@@ -33030,37 +33298,37 @@
     function render2() {
       const b = state2.buildings.map((x) => `
       <div class="row" data-hover-b="${x.id}">
-        <input data-id="${x.id}" data-name type="text" value="${x.name || x.id.slice(-4) + "\u53F7"}" style="width:70px">
-        \u5C42\u9AD8<input data-id="${x.id}" data-k="floorHeight" type="number" step="any" value="${x.floorHeight}" style="width:46px">
-        \u5C42\u6570<input data-id="${x.id}" data-k="floorCount" type="number" value="${x.floorCount}" style="width:40px">
-        <button data-del-b="${x.id}">\u5220</button>
+        <input data-id="${x.id}" data-name type="text" value="${x.name || t("nameFallback", x.id)}" style="width:70px">
+        ${t("list.fh")}<input data-id="${x.id}" data-k="floorHeight" type="number" step="any" value="${x.floorHeight}" style="width:46px">
+        ${t("list.fc")}<input data-id="${x.id}" data-k="floorCount" type="number" value="${x.floorCount}" style="width:40px">
+        <button data-del-b="${x.id}">${t("list.del")}</button>
       </div>`).join("");
       const w = state2.walls.map((x) => `
       <div class="row">
-        \u5899 ${x.id.slice(-4)}
-        \u9AD8<input data-id="${x.id}" data-wk="height" type="number" step="0.1" value="${x.height}" style="width:50px">
-        \u539A<input data-id="${x.id}" data-wk="thickness" type="number" step="0.1" value="${x.thickness}" style="width:50px">
-        <button data-del-w="${x.id}">\u5220</button>
+        ${t("list.walls")} ${x.id.slice(-4)}
+        ${t("list.h")}<input data-id="${x.id}" data-wk="height" type="number" step="0.1" value="${x.height}" style="width:50px">
+        ${t("list.t")}<input data-id="${x.id}" data-wk="thickness" type="number" step="0.1" value="${x.thickness}" style="width:50px">
+        <button data-del-w="${x.id}">${t("list.del")}</button>
       </div>`).join("");
-      container.innerHTML = `<h4>\u697C</h4>${b}<h4>\u56F4\u5899</h4>${w}`;
+      container.innerHTML = `<h4>${t("list.buildings")}</h4>${b}<h4>${t("list.walls")}</h4>${w}`;
       container.querySelectorAll("input[data-k]").forEach((el2) => {
         el2.oninput = () => {
-          const t = state2.buildings.find((z) => z.id === el2.dataset.id);
-          t[el2.dataset.k] = +el2.value;
+          const t2 = state2.buildings.find((z) => z.id === el2.dataset.id);
+          t2[el2.dataset.k] = +el2.value;
           onChange();
         };
       });
       container.querySelectorAll("input[data-name]").forEach((el2) => {
         el2.oninput = () => {
-          const t = state2.buildings.find((z) => z.id === el2.dataset.id);
-          t.name = el2.value;
+          const t2 = state2.buildings.find((z) => z.id === el2.dataset.id);
+          t2.name = el2.value;
           onChange();
         };
       });
       container.querySelectorAll("input[data-wk]").forEach((el2) => {
         el2.oninput = () => {
-          const t = state2.walls.find((z) => z.id === el2.dataset.id);
-          t[el2.dataset.wk] = +el2.value;
+          const t2 = state2.walls.find((z) => z.id === el2.dataset.id);
+          t2[el2.dataset.wk] = +el2.value;
           onChange();
         };
       });
@@ -33071,7 +33339,7 @@
       container.querySelectorAll("button[data-del-b]").forEach((el2) => {
         el2.onclick = async () => {
           const b2 = state2.buildings.find((z) => z.id === el2.dataset.delB);
-          if (!await confirmModal({ title: "\u5220\u9664\u697C\u680B", message: `\u786E\u5B9A\u5220\u9664\u300C${b2?.name || "\u8BE5\u697C"}\u300D\uFF1F` })) return;
+          if (!await confirmModal({ title: t("dlg.delBld"), message: t("dlg.delBldMsg", b2?.name || t("nameFallback", el2.dataset.delB)), okText: t("dlg.delete"), cancelText: t("dlg.cancel") })) return;
           pushUndo();
           state2.buildings = state2.buildings.filter((z) => z.id !== el2.dataset.delB);
           onChange();
@@ -33080,7 +33348,7 @@
       });
       container.querySelectorAll("button[data-del-w]").forEach((el2) => {
         el2.onclick = async () => {
-          if (!await confirmModal({ title: "\u5220\u9664\u56F4\u5899", message: "\u786E\u5B9A\u5220\u9664\u8BE5\u56F4\u5899\uFF1F" })) return;
+          if (!await confirmModal({ title: t("dlg.delWall"), message: t("dlg.delWallMsg"), okText: t("dlg.delete"), cancelText: t("dlg.cancel") })) return;
           pushUndo();
           state2.walls = state2.walls.filter((z) => z.id !== el2.dataset.delW);
           onChange();
@@ -33089,6 +33357,7 @@
       });
     }
     render2();
+    onLangChange(render2);
     return { render: render2 };
   }
 
@@ -33155,9 +33424,9 @@
     for (let iv = 0; iv < nv; iv++) {
       const v = iv / (nv - 1) * Htotal;
       for (let iu = 0; iu < nu; iu++) {
-        const t = iu / (nu - 1);
-        const px2 = a[0] + dx * t + nx * offset;
-        const pz2 = a[1] + dz * t + nz * offset;
+        const t2 = iu / (nu - 1);
+        const px2 = a[0] + dx * t2 + nx * offset;
+        const pz2 = a[1] + dz * t2 + nz * offset;
         nodes.push({ pos: [px2, v, pz2], buildingId: building.id, floor: floorAt(v), iu, iv, edgeIndex });
       }
     }
@@ -33427,14 +33696,14 @@
     // 深绿
   ];
   function hoursColorRGB(h) {
-    const lerp2 = (a, b, t) => a + (b - a) * t;
+    const lerp2 = (a, b, t2) => a + (b - a) * t2;
     if (h <= SUN_STOPS[0][0]) return SUN_STOPS[0][1];
     if (h >= SUN_STOPS[SUN_STOPS.length - 1][0]) return SUN_STOPS[SUN_STOPS.length - 1][1];
     for (let i = 1; i < SUN_STOPS.length; i++) {
       if (h <= SUN_STOPS[i][0]) {
         const [h0, c0] = SUN_STOPS[i - 1], [h1, c1] = SUN_STOPS[i];
-        const t = (h - h0) / (h1 - h0);
-        return [lerp2(c0[0], c1[0], t), lerp2(c0[1], c1[1], t), lerp2(c0[2], c1[2], t)];
+        const t2 = (h - h0) / (h1 - h0);
+        return [lerp2(c0[0], c1[0], t2), lerp2(c0[1], c1[1], t2), lerp2(c0[2], c1[2], t2)];
       }
     }
     return SUN_STOPS[SUN_STOPS.length - 1][1];
@@ -33617,21 +33886,21 @@
   document.getElementById("load-bg").onclick = () => document.getElementById("bg-file").click();
   document.getElementById("calibrate-bg").onclick = () => {
     if (!state.bg) {
-      alertModal({ message: "\u8BF7\u5148\u8F7D\u5165\u5E95\u56FE" });
+      alertModal({ message: t("msg.loadBgFirst") });
       return;
     }
     editor.startCalibrate();
   };
   var bgScale = document.getElementById("bg-scale");
   bgScale.oninput = () => {
-    const t = +bgScale.value / 200;
-    const mpp = 0.05 * Math.pow(40, t);
+    const t2 = +bgScale.value / 200;
+    const mpp = 0.05 * Math.pow(40, t2);
     editor.setBgMpp(mpp);
   };
   var bgLockBtn = document.getElementById("bg-lock");
   bgLockBtn.onclick = () => {
     state.bgLocked = !state.bgLocked;
-    bgLockBtn.textContent = state.bgLocked ? "\u{1F513} \u89E3\u9501\u5E95\u56FE" : "\u{1F512} \u9501\u5E95\u56FE";
+    bgLockBtn.textContent = state.bgLocked ? t("bg.unlock") : t("bg.lock");
   };
   function nudgeBg(delta) {
     bgScale.value = Math.max(0, Math.min(200, +bgScale.value + delta));
@@ -33641,11 +33910,11 @@
   document.getElementById("bg-dec").onclick = () => nudgeBg(-0.1);
   document.getElementById("bg-del").onclick = () => {
     if (!state.bg) {
-      alertModal({ message: "\u5F53\u524D\u6CA1\u6709\u5E95\u56FE" });
+      alertModal({ message: t("msg.noBg") });
       return;
     }
     if (state.bgLocked) {
-      alertModal({ message: "\u8BF7\u5148\u89E3\u9501\u5E95\u56FE\uFF0C\u624D\u80FD\u5220\u9664" });
+      alertModal({ message: t("msg.unlockFirst") });
       return;
     }
     editor.clearBg();
@@ -33749,10 +34018,10 @@
       editor.resizeCanvas(w, h);
     }
     const minBtn = document.getElementById("minimize-plan");
-    if (planWrap.classList.contains("minimized")) minBtn.textContent = "2D \u7F16\u8F91\u5668";
+    if (planWrap.classList.contains("minimized")) minBtn.textContent = t("plan.title");
     minBtn.onclick = () => {
       const min = planWrap.classList.toggle("minimized");
-      minBtn.textContent = min ? "2D \u7F16\u8F91\u5668" : "\u2014";
+      minBtn.textContent = min ? t("plan.title") : "\u2014";
       if (min) {
         planWrap.classList.remove("fullscreen");
         planWrap.style.removeProperty("width");
@@ -33769,7 +34038,7 @@
       planWrap.classList.remove("minimized");
       minBtn.textContent = "\u2014";
       const fs = planWrap.classList.toggle("fullscreen");
-      fsBtn.textContent = fs ? "\u8FD8\u539F" : "\u5168\u5C4F";
+      fsBtn.textContent = fs ? t("plan.restore") : t("plan.fullscreen");
       planWrap.style.position = "fixed";
       if (fs) {
         planWrap.style.left = "0";
@@ -33808,7 +34077,7 @@
   document.getElementById("draw-geo").onclick = () => {
     const pts = document.getElementById("geo-points").value.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => l.split(/[,\s]+/).map(Number)).filter((a) => a.length >= 2 && !a.slice(0, 2).some(Number.isNaN)).map(([lat, lon]) => ({ lat, lon }));
     if (pts.length < 3) {
-      alertModal({ message: "\u81F3\u5C11 3 \u4E2A\u70B9\uFF08\u6BCF\u884C\uFF1A\u7EAC\u5EA6,\u7ECF\u5EA6\uFF09\u624D\u80FD\u56F4\u6210\u9762" });
+      alertModal({ message: t("geo.tooFew") });
       return;
     }
     const g = geoPointsToWorld(pts);
@@ -33875,9 +34144,9 @@
   document.getElementById("save-local").onclick = () => {
     try {
       localStorage.setItem("daylight-state", serializeState(state));
-      alertModal({ message: "\u5DF2\u4FDD\u5B58\u5230\u672C\u5730" });
+      alertModal({ message: t("msg.saved") });
     } catch (e) {
-      alertModal({ message: "\u4FDD\u5B58\u5931\u8D25: " + e.message });
+      alertModal({ message: t("msg.saveFail") + ": " + e.message });
     }
   };
   document.getElementById("export-file").onclick = () => {
@@ -33896,9 +34165,9 @@
     reader.onload = () => {
       try {
         applyLoadedState(deserializeState(reader.result));
-        alertModal({ message: "\u5DF2\u5BFC\u5165" });
+        alertModal({ message: t("msg.imported") });
       } catch (err) {
-        alertModal({ message: "\u5BFC\u5165\u5931\u8D25: " + err.message });
+        alertModal({ message: t("msg.importFail") + ": " + err.message });
       }
     };
     reader.readAsText(f);
@@ -33972,11 +34241,11 @@
         total++;
         if (f.pass) passCount++;
         const color = f.pass ? "#2e7d32" : "#c62828";
-        html += `<tr style="color:${color}"><td>\u7B2C${f.floor + 1}\u5C42</td><td style="text-align:right">${f.hours.toFixed(1)}h</td><td style="text-align:right">${f.pass ? "\u2713" : "\u2717"}</td></tr>`;
+        html += `<tr style="color:${color}"><td>${t("bld.floorN", f.floor + 1)}</td><td style="text-align:right">${f.hours.toFixed(1)}h</td><td style="text-align:right">${f.pass ? "\u2713" : "\u2717"}</td></tr>`;
       }
       html += "</table>";
     }
-    rep.innerHTML = total ? `<div style="margin-bottom:4px;color:#555">\u8FBE\u6807 ${passCount}/${total} \u5C42</div>` + html : `<div style="color:#8a909b">\u65E0\u9009\u4E2D\u7ACB\u9762\uFF083D \u70B9\u51FB\u697C\u7ACB\u9762\u9009\u62E9\uFF09</div>`;
+    rep.innerHTML = total ? `<div style="margin-bottom:4px;color:#555">${t("analysis.pass", passCount, total)}</div>` + html : `<div style="color:#8a909b">${t("analysis.noFace")}</div>`;
     renderLegend();
   }
   function renderLegend() {
@@ -33992,10 +34261,69 @@
     el2.innerHTML = `<div style="height:10px;border-radius:3px;background:linear-gradient(to right,${stops.join(",")})"></div><div style="display:flex;justify-content:space-between;font-size:10px;color:#8a909b;margin-top:2px"><span>0h</span><span>2h</span><span>4h</span><span>6h</span><span>8h</span></div>`;
   }
   (() => {
-    const t = document.getElementById("sec-lists-title");
-    if (t) t.onclick = () => document.getElementById("sec-lists").classList.toggle("collapsed");
+    const t2 = document.getElementById("sec-lists-title");
+    if (t2) t2.onclick = () => document.getElementById("sec-lists").classList.toggle("collapsed");
   })();
-  var HELP_HTML = `
+  var HELP_EN = `
+<h2 style="margin:0 0 6px;font-size:18px">Building Sunlight Analysis Simulator \xB7 Guide</h2>
+<p style="color:#8a909b;margin:0 0 14px">Draw buildings/walls in the 2D editor, see sunlight and shadows in real-time 3D, and run facade sunlight-hours analysis. Data auto-saves to your browser.</p>
+
+<h3>\u2460 Scene bounds (right panel)</h3>
+<ul>
+  <li>Enter one point per line as "lat,lon" (\u22653 points), then click "Draw bounds (set latitude)" to outline the site; latitude/longitude are set from the center automatically.</li>
+</ul>
+
+<h3>\u2461 Sun</h3>
+<ul>
+  <li>Drag sliders or use \xB1 for <b>latitude/longitude/date/time</b>; "Winter sol. / Equinox / Summer sol." set standard days.</li>
+  <li>"\u25B6 Play" loops time (true solar time 5\u219221h); the dropdown sets <b>speed</b> (0.1\xD7\u20138\xD7).</li>
+  <li>Buildings are warm-lit by day (sun-facing bright, shaded dark) and black after sunset. The compass (top-left) rotates with the view.</li>
+</ul>
+
+<h3>\u2462 Building / Wall (top bar)</h3>
+<ul>
+  <li><b>Click to add points</b>, <b>Enter or right-click to finish</b>, <b>Backspace</b> to undo the last point.</li>
+  <li>In Building mode, <b>drag on empty space</b> to quickly draw a rectangular building.</li>
+  <li>A dialog asks for floor height / floor count (height accepts decimals).</li>
+</ul>
+
+<h3>\u2463 Drag / Rotate / Settings</h3>
+<ul>
+  <li><b>Drag</b> mode: move buildings, walls, basemap, canvas; left button also pans the 3D view.</li>
+  <li>Click a building \u2192 "Building" panel: edit name/floor height/floors, expand <b>Per-floor height</b> for individual floors, or <b>Delete</b> (with confirmation).</li>
+  <li>With a building selected, drag its orange <b>rotate handle</b> to rotate it.</li>
+  <li><b>Undo/Redo</b>: Ctrl+Z / Ctrl+Shift+Z (or Ctrl+Y) for create/delete/move/rotate.</li>
+</ul>
+
+<h3>\u2464 Basemap & perspective rectification</h3>
+<ul>
+  <li>"Basemap" loads a satellite/site image; \xB1 or slider to scale; "\u{1F512} Lock" prevents accidental drag; "Delete basemap" removes it.</li>
+  <li><b>Rectify</b>: for an obliquely-shot image, click "Rectify", mark 4 points, then enter their lat/lon in order; a homography reprojects it into an orthographic plan.</li>
+</ul>
+
+<h3>\u2465 Sunlight analysis</h3>
+<ul>
+  <li>Uses the <b>date in the Sun panel</b>; accumulates facade sunlight hours in true solar time 08:00\u201316:00 (2h threshold).</li>
+  <li>Analyzes each building's <b>south facade</b> by default; <b>click a facade in 3D</b> to add/remove faces (blue outline).</li>
+  <li>Click "Analyze" (with overlay + progress bar); facades show a <b>full gradient heatmap</b> (0h red \u2192 8h green, see the legend); the report lists per-floor hours and pass \u2713/\u2717.</li>
+  <li>"Clear heatmap" hides results; editing geometry/date clears stale results automatically.</li>
+</ul>
+
+<h3>\u2466 Save / Export / Import</h3>
+<ul>
+  <li>Changes <b>auto-save</b> to the browser and restore on reload.</li>
+  <li>"Save" stores locally; "Export" downloads JSON (basemap included); "Import" loads JSON.</li>
+</ul>
+
+<h3>\u2467 2D editor window</h3>
+<ul>
+  <li>Drag the title bar to move; drag edges/corner to resize; "Fullscreen" / "\u2014" to minimize.</li>
+  <li>Right-drag to pan, scroll to zoom at the cursor, "Reset view" to restore.</li>
+</ul>
+
+<p style="color:#8a909b;margin-top:14px;font-size:11px">Note: analysis is a facade-grid estimation (engineering reference). China's GB 50180 uses different time bands per standard day (Great Cold 8\u201316, Winter Solstice 9\u201315); this tool uses 8\u201316 uniformly.</p>
+`;
+  var HELP_ZH = `
 <h2 style="margin:0 0 6px;font-size:18px">\u697C\u623F\u91C7\u5149\u6A21\u62DF \xB7 \u4F7F\u7528\u8BF4\u660E</h2>
 <p style="color:#8a909b;margin:0 0 14px">\u5728 2D \u7F16\u8F91\u5668\u753B\u697C/\u56F4\u5899\uFF0C3D \u5B9E\u65F6\u770B\u65E5\u7167\u4E0E\u9634\u5F71\uFF0C\u505A\u7ACB\u9762\u65E5\u7167\u65F6\u6570\u5206\u6790\u3002\u6570\u636E\u81EA\u52A8\u4FDD\u5B58\u5230\u672C\u5730\u6D4F\u89C8\u5668\u3002</p>
 
@@ -34054,40 +34382,48 @@
 
 <p style="color:#8a909b;margin-top:14px;font-size:11px">\u6CE8\uFF1A\u65E5\u7167\u5206\u6790\u4E3A\u7ACB\u9762\u7F51\u683C\u4F30\u7B97\uFF08\u5DE5\u7A0B\u53C2\u8003\uFF09\uFF1B\u56FD\u6807\u4E0D\u540C\u6807\u51C6\u65E5\u7A97\u53E3\u4E0D\u540C\uFF08\u5927\u5BD2 8\u201316\u3001\u51AC\u81F3 9\u201315\uFF09\uFF0C\u672C\u5DE5\u5177\u7EDF\u4E00 8\u201316\u3002</p>
 `;
-  function showHelp() {
-    let ov = document.getElementById("help-overlay");
-    if (!ov) {
-      ov = document.createElement("div");
-      ov.id = "help-overlay";
-      ov.style.cssText = "position:fixed;inset:0;z-index:210;background:rgba(42,45,51,.45);display:flex;align-items:center;justify-content:center;padding:24px;";
-      const box = document.createElement("div");
-      box.style.cssText = 'background:#fff;border-radius:12px;max-width:680px;width:100%;max-height:86vh;overflow:auto;padding:22px 26px;box-shadow:0 12px 40px rgba(0,0,0,.3);font:13px/1.7 -apple-system,"PingFang SC",sans-serif;color:#2a2d33;';
-      box.innerHTML = HELP_HTML + '<div style="text-align:right;margin-top:16px"><button id="help-close" style="padding:7px 18px;border:1px solid #2b5f8a;border-radius:6px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:13px">\u77E5\u9053\u4E86</button></div>';
-      ov.appendChild(box);
-      document.body.appendChild(ov);
-      const hide = () => {
-        ov.style.display = "none";
-      };
-      ov.addEventListener("mousedown", (e) => {
-        if (e.target === ov) hide();
+  var _helpOv = null;
+  function buildHelp() {
+    if (!_helpOv) {
+      _helpOv = document.createElement("div");
+      _helpOv.id = "help-overlay";
+      _helpOv.style.cssText = "position:fixed;inset:0;z-index:210;background:rgba(42,45,51,.45);display:none;align-items:center;justify-content:center;padding:24px;";
+      document.body.appendChild(_helpOv);
+      _helpOv.addEventListener("mousedown", (e) => {
+        if (e.target === _helpOv) _helpOv.style.display = "none";
       });
-      box.querySelector("#help-close").onclick = hide;
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && ov.style.display !== "none") {
+        if (e.key === "Escape" && _helpOv.style.display !== "none") {
           e.stopPropagation();
-          hide();
+          _helpOv.style.display = "none";
         }
       }, true);
-      box.querySelectorAll("h3").forEach((h) => {
-        h.style.cssText = "font-size:13px;margin:14px 0 4px;color:#2b5f8a";
-      });
-      box.querySelectorAll("ul").forEach((u) => {
-        u.style.cssText = "margin:0 0 4px;padding-left:20px";
-      });
     }
-    ov.style.display = "flex";
+    const okText = getLang() === "en" ? "Got it" : "\u77E5\u9053\u4E86";
+    _helpOv.innerHTML = '<div style="background:#fff;border-radius:12px;max-width:680px;width:100%;max-height:86vh;overflow:auto;padding:22px 26px;box-shadow:0 12px 40px rgba(0,0,0,.3);font:13px/1.7 -apple-system,sans-serif;color:#2a2d33">' + (getLang() === "en" ? HELP_EN : HELP_ZH) + `<div style="text-align:right;margin-top:16px"><button id="help-close" style="padding:7px 18px;border:1px solid #2b5f8a;border-radius:6px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:13px">${okText}</button></div></div>`;
+    const box = _helpOv.firstChild;
+    box.querySelector("#help-close").onclick = () => {
+      _helpOv.style.display = "none";
+    };
+    box.querySelectorAll("h3").forEach((h) => {
+      h.style.cssText = "font-size:13px;margin:14px 0 4px;color:#2b5f8a";
+    });
+    box.querySelectorAll("ul").forEach((u) => {
+      u.style.cssText = "margin:0 0 4px;padding-left:20px";
+    });
+  }
+  function showHelp() {
+    buildHelp();
+    _helpOv.style.display = "flex";
   }
   document.getElementById("help-btn").onclick = showHelp;
+  onLangChange(() => {
+    if (_helpOv && _helpOv.style.display !== "none") buildHelp();
+  });
+  document.getElementById("lang-btn").onclick = toggleLang;
+  onLangChange(() => {
+    document.getElementById("bg-lock").textContent = state.bgLocked ? t("bg.unlock") : t("bg.lock");
+  });
   document.getElementById("clear-sunlight").onclick = () => {
     clearAnalysis();
     renderLegend();
@@ -34098,7 +34434,7 @@
       ov = document.createElement("div");
       ov.id = "sun-overlay";
       ov.style.cssText = "position:fixed;inset:0;z-index:200;background:rgba(42,45,51,.4);display:flex;align-items:center;justify-content:center;";
-      ov.innerHTML = '<div style="background:#fff;border-radius:10px;padding:20px 24px;min-width:280px;box-shadow:0 8px 30px rgba(0,0,0,.25);font:13px sans-serif;color:#2a2d33;text-align:center"><div style="margin-bottom:12px;font-weight:600">\u65E5\u7167\u5206\u6790\u8BA1\u7B97\u4E2D\u2026</div><div style="height:10px;background:#eee;border-radius:5px;overflow:hidden"><div id="sun-progress" style="height:100%;width:0;background:#2b5f8a;transition:width .12s"></div></div><div id="sun-progress-pct" style="margin-top:8px;color:#8a909b">0%</div></div>';
+      ov.innerHTML = '<div style="background:#fff;border-radius:10px;padding:20px 24px;min-width:280px;box-shadow:0 8px 30px rgba(0,0,0,.25);font:13px sans-serif;color:#2a2d33;text-align:center"><div style="margin-bottom:12px;font-weight:600">' + t("analysis.computing") + '</div><div style="height:10px;background:#eee;border-radius:5px;overflow:hidden"><div id="sun-progress" style="height:100%;width:0;background:#2b5f8a;transition:width .12s"></div></div><div id="sun-progress-pct" style="margin-top:8px;color:#8a909b">0%</div></div>';
       document.body.appendChild(ov);
     }
     ov.style.display = "flex";
@@ -34117,7 +34453,7 @@
   }
   document.getElementById("run-sunlight").onclick = async () => {
     if (!state.buildings.length) {
-      alertModal({ message: "\u8BF7\u5148\u753B\u697C" });
+      alertModal({ message: t("analysis.needBuilding") });
       return;
     }
     const dayOfYear = state.dayOfYear;
@@ -34183,6 +34519,7 @@
   renderLegend();
   updateSun();
   loop();
+  setLang(getLang());
 })();
 /**
  * @license

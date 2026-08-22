@@ -4,6 +4,8 @@
 //   // 返回 {key: value, ...}，取消返回 null
 //   await modal.alert({ title, message });
 
+import { t } from './i18n.js';
+
 const STYLE = `
   position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center;
   background: rgba(42,45,51,0.35); font-family: inherit;`;
@@ -53,8 +55,8 @@ export function promptModal({ title, fields }) {
     }
 
     const btns = el('div', 'display:flex;justify-content:flex-end;gap:8px;margin-top:14px;');
-    const cancel = el('button', 'padding:6px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#2a2d33;cursor:pointer;font-size:12px;', '取消');
-    const ok = el('button', 'padding:6px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px;', '确定');
+    const cancel = el('button', 'padding:6px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#2a2d33;cursor:pointer;font-size:12px;', t('dlg.cancel'));
+    const ok = el('button', 'padding:6px 12px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px;', t('dlg.ok'));
     btns.appendChild(cancel); btns.appendChild(ok);
     box.appendChild(btns);
     overlay.appendChild(box);
@@ -90,7 +92,7 @@ export function alertModal({ title, message }) {
     if (title) box.appendChild(el('div', 'font-weight:600;font-size:14px;margin-bottom:8px;', title));
     box.appendChild(el('div', 'color:#2a2d33;', message));
     const btns = el('div', 'display:flex;justify-content:flex-end;margin-top:14px;');
-    const ok = el('button', 'padding:6px 16px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px;', '确定');
+    const ok = el('button', 'padding:6px 16px;border:1px solid #2b5f8a;border-radius:4px;background:#2b5f8a;color:#fff;cursor:pointer;font-size:12px;', t('dlg.ok'));
     btns.appendChild(ok);
     box.appendChild(btns);
     overlay.appendChild(box);
@@ -104,7 +106,7 @@ export function alertModal({ title, message }) {
 }
 
 // 确认框：确定→true，取消/点外→false
-export function confirmModal({ title, message, okText = '删除', danger = true }) {
+export function confirmModal({ title, message, okText, cancelText, danger = true }) {
   return new Promise((resolve) => {
     const overlay = el('div', STYLE);
     const box = el('div',
@@ -113,9 +115,9 @@ export function confirmModal({ title, message, okText = '删除', danger = true 
     if (title) box.appendChild(el('div', 'font-weight:600;font-size:14px;margin-bottom:8px;', title));
     if (message) box.appendChild(el('div', 'color:#2a2d33;', message));
     const btns = el('div', 'display:flex;justify-content:flex-end;gap:8px;margin-top:14px;');
-    const cancel = el('button', 'padding:6px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#2a2d33;cursor:pointer;font-size:12px;', '取消');
+    const cancel = el('button', 'padding:6px 12px;border:1px solid #e6e4de;border-radius:4px;background:#fff;color:#2a2d33;cursor:pointer;font-size:12px;', cancelText || t('dlg.cancel'));
     const okBg = danger ? '#b3261e' : '#2b5f8a';
-    const ok = el('button', `padding:6px 12px;border:1px solid ${okBg};border-radius:4px;background:${okBg};color:#fff;cursor:pointer;font-size:12px;`, okText);
+    const ok = el('button', `padding:6px 12px;border:1px solid ${okBg};border-radius:4px;background:${okBg};color:#fff;cursor:pointer;font-size:12px;`, okText || t('dlg.delete'));
     btns.appendChild(cancel); btns.appendChild(ok);
     box.appendChild(btns);
     overlay.appendChild(box);

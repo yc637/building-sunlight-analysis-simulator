@@ -118,31 +118,32 @@
   <div id="app">
     <!-- 顶部工具条 -->
     <div id="topbar">
-      <span class="title">采光模拟</span>
+      <span class="title" data-i18n="title">采光模拟</span>
       <div class="group">
-        <button id="mode-building" class="active">画楼</button>
-        <button id="mode-wall">画围墙</button>
-        <button id="mode-drag">拖拽</button>
+        <button id="mode-building" class="active" data-i18n="mode.building">画楼</button>
+        <button id="mode-wall" data-i18n="mode.wall">画围墙</button>
+        <button id="mode-drag" data-i18n="mode.drag">拖拽</button>
       </div>
       <span class="sep"></span>
       <div class="group">
-        <button id="load-bg">底图</button>
-        <button id="calibrate-bg">校正</button>
+        <button id="load-bg" data-i18n="bg.load">底图</button>
+        <button id="calibrate-bg" data-i18n="bg.rectify">校正</button>
         <button id="bg-dec">−</button>
         <input id="bg-scale" type="range" min="0" max="200" step="0.1" value="100" style="width:110px">
         <button id="bg-inc">＋</button>
-        <button id="bg-lock">🔒 锁底图</button>
-        <button id="bg-del">删除底图</button>
+        <button id="bg-lock" data-i18n="bg.lock">🔒 锁底图</button>
+        <button id="bg-del" data-i18n="bg.del">删除底图</button>
       </div>
       <span class="sep"></span>
       <div class="group">
-        <button id="reset-view">复位视图</button>
+        <button id="reset-view" data-i18n="view.reset">复位视图</button>
       </div>
       <div class="group" style="margin-left:auto">
-        <button id="help-btn">📖 说明</button>
-        <button id="save-local">保存</button>
-        <button id="export-file">导出</button>
-        <button id="import-file">导入</button>
+        <button id="lang-btn" data-i18n="langBtn">EN</button>
+        <button id="help-btn" data-i18n="help">📖 说明</button>
+        <button id="save-local" data-i18n="save">保存</button>
+        <button id="export-file" data-i18n="export">导出</button>
+        <button id="import-file" data-i18n="import">导入</button>
         <input id="import-input" type="file" accept=".json,application/json">
       </div>
     </div>
@@ -156,9 +157,9 @@
         <!-- 2D 编辑器浮动面板（相对 3D 视图定位） -->
         <div id="plan2d-wrap">
           <div id="plan2d-head">
-            <span class="t">2D 编辑器</span>
-            <span style="margin-left:auto;font-size:10px;color:var(--muted)">点击加点 · 回车/右键完成 · 长按右键拖拽 · 退格撤销</span>
-            <button id="fullscreen-plan">全屏</button>
+            <span class="t" data-i18n="plan.title">2D 编辑器</span>
+            <span style="margin-left:auto;font-size:10px;color:var(--muted)" data-i18n="plan.hint">点击加点 · 回车/右键完成 · 长按右键拖拽 · 退格撤销</span>
+            <button id="fullscreen-plan" data-i18n="plan.fullscreen">全屏</button>
             <button id="minimize-plan">—</button>
           </div>
           <canvas id="plan2d" width="560" height="420"></canvas>
@@ -174,30 +175,30 @@
       <!-- 右侧面板 -->
       <div id="panel">
         <section>
-          <div class="sec-title">场景范围</div>
-          <textarea id="geo-points" rows="4"
+          <div class="sec-title" data-i18n="sec.bounds">场景范围</div>
+          <textarea id="geo-points" rows="4" data-i18n-ph="geo.ph"
             placeholder="每行一个点：纬度,经度&#10;39.9100, 116.3900&#10;39.9100, 116.4050&#10;39.9200, 116.4050"></textarea>
-          <div class="row"><button id="draw-geo" class="primary" style="width:100%">画范围（并设纬度）</button></div>
+          <div class="row"><button id="draw-geo" class="primary" style="width:100%" data-i18n="geo.draw">画范围（并设纬度）</button></div>
         </section>
         <section>
-          <div class="sec-title">太阳</div>
+          <div class="sec-title" data-i18n="sec.sun">太阳</div>
           <div id="controls"></div>
         </section>
         <section>
-          <div class="sec-title">日照分析</div>
+          <div class="sec-title" data-i18n="sec.analysis">日照分析</div>
           <div class="row" style="color:#8a909b;font-size:11px;line-height:1.5;display:block">
-            按「太阳」面板所选日期，统计真太阳时 8:00–16:00 各立面日照时数（达标线 2h）。<br>
-            3D 点击楼立面可增减分析面（默认南面）。
+            <span data-i18n="analysis.hint1">按「太阳」面板所选日期，统计真太阳时 8:00–16:00 各立面日照时数（达标线 2h）。</span><br>
+            <span data-i18n="analysis.hint2">3D 点击楼立面可增减分析面（默认南面）。</span>
           </div>
           <div class="row" style="gap:6px">
-            <button id="run-sunlight" class="primary" style="flex:1">日照分析</button>
-            <button id="clear-sunlight" style="flex:0 0 auto">清除热力图</button>
+            <button id="run-sunlight" class="primary" style="flex:1" data-i18n="analysis.run">日照分析</button>
+            <button id="clear-sunlight" style="flex:0 0 auto" data-i18n="analysis.clear">清除热力图</button>
           </div>
           <div id="sun-legend" style="margin-top:6px"></div>
           <div id="sun-report" style="margin-top:6px;font-size:11px"></div>
         </section>
         <section id="sec-lists" class="collapsible collapsed">
-          <div class="sec-title" id="sec-lists-title">楼栋</div>
+          <div class="sec-title" id="sec-lists-title" data-i18n="sec.buildings">楼栋</div>
           <div id="lists"></div>
         </section>
       </div>
