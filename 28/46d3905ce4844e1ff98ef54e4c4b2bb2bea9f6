@@ -1,0 +1,87 @@
+.gitignore
+  s_482eaa33a87939::t_815c4eeaa8cd03 1
+LICENSE
+  s_482eaa33a87939::t_a4c4a8eca18e0a 1-21
+README.md
+  s_482eaa33a87939::t_3561df64fc64bd 1-105
+build.sh
+  s_482eaa33a87939::t_de3b251545d588 1-5
+bundle.js
+  s_482eaa33a87939::t_a3e87b17e66f6f 1-34191
+controls.js
+  s_482eaa33a87939::t_94bdcca4320944 1-78
+controls.test.js
+  s_482eaa33a87939::t_dd690f815833e4 1-12
+daylight.js
+  s_482eaa33a87939::t_4a40d47dd402d9 1-20
+daylight.test.js
+  s_482eaa33a87939::t_d92205f0de0968 1-13
+docs/superpowers/plans/2026-08-19-perspective-rectification.md
+  s_482eaa33a87939::t_bd00c43c12dc4d 1-462
+docs/superpowers/plans/2026-08-20-facade-selection-continuous-heatmap.md
+  s_482eaa33a87939::t_a9daad4485eb7c 1-528
+docs/superpowers/plans/2026-08-20-sunlight-hours-analysis.md
+  s_482eaa33a87939::t_af7b67ce8f156a 1-568
+docs/superpowers/specs/2026-08-19-perspective-rectification-design.md
+  s_482eaa33a87939::t_5c1b9168fef72c 1-85
+docs/superpowers/specs/2026-08-20-facade-selection-continuous-heatmap-design.md
+  s_482eaa33a87939::t_2fcd2efd3c8196 1-137
+docs/superpowers/specs/2026-08-20-sunlight-hours-analysis-design.md
+  s_482eaa33a87939::t_9c0fa06a20ebb4 1-207
+editor2d.js
+  s_482eaa33a87939::t_385c3fcc930bce 1-862
+geometry.js
+  s_482eaa33a87939::t_3e3027a8b75e3e 1-128
+geometry.test.js
+  s_482eaa33a87939::t_bc804095642903 1-25
+homography.js
+  s_482eaa33a87939::t_4a650994d62528 1-105
+homography.test.js
+  s_482eaa33a87939::t_4cd094472aa9da 1-62
+index.html
+  s_482eaa33a87939::t_28012975c48a3c 1-210
+lists.js
+  s_482eaa33a87939::t_2dd8b50f1d0491 1-67
+modal.js
+  s_482eaa33a87939::t_45fb49bf142f65 1-130
+package.json
+  s_482eaa33a87939::t_871214817a4c8d 1-8
+scene.js
+  s_482eaa33a87939::t_c74cf56e696eac 1-895
+solar.js
+  s_482eaa33a87939::t_0e3b3a510be6c9 1-83
+solar.test.js
+  s_482eaa33a87939::t_8a7717366bb360 1-103
+sunlight.js
+  s_482eaa33a87939::t_b256d306a79bf8 1-238
+sunlight.test.js
+  s_482eaa33a87939::t_6cd6af67ac82a2 1-165
+vendor/OrbitControls.js
+  s_482eaa33a87939::t_dda040fc58b5a6 1-1417
+vendor/three.module.js
+  s_482eaa33a87939::t_a2bee4686bee45 1-53044
+viewport.js
+  s_482eaa33a87939::t_00e228664ac99f 1-182
+viewport.test.js
+  s_482eaa33a87939::t_9227bc57f3f630 1-206
+docs/superpowers/plans/2026-08-16-daylight-sim.md
+  s_482eaa33a87939::t_b7711368894475 1-1245
+docs/superpowers/specs/2026-08-16-daylight-sim-design.md
+  s_482eaa33a87939::t_8867d3ccea60c9 1-158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "2846d3905ce4844e1ff98ef54e4c4b2bb2bea9f6",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
