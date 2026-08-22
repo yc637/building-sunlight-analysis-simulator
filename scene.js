@@ -541,9 +541,9 @@ document.getElementById('draw-geo').onclick = () => {
   const lonSlider = document.getElementById('c-lon');
   const lonVal = document.getElementById('c-lon-l');
   if (latSlider) latSlider.value = g.midLat;
-  if (latVal) latVal.textContent = '纬度 ' + g.midLat.toFixed(1) + '°';
+  if (latVal) latVal.textContent = t('ctl.lat') + ' ' + g.midLat.toFixed(1) + '°';
   if (lonSlider) lonSlider.value = g.midLon;
-  if (lonVal) lonVal.textContent = '经度 ' + g.midLon.toFixed(1) + '°';
+  if (lonVal) lonVal.textContent = t('ctl.lon') + ' ' + g.midLon.toFixed(1) + '°';
   updateSun();
   refreshDaylight(THREE);
   editor.fitToBoundary();

@@ -33169,13 +33169,14 @@
     let curDate = "2026-12-21";
     let season = null;
     const $ = (id) => container.querySelector(id);
+    const fmt = (v) => String(Math.round(v * 100) / 100);
     function render2() {
       container.innerHTML = `
-      <div class="row"><label id="c-lat-l">${t("ctl.lat")} ${state2.lat}\xB0</label>
+      <div class="row"><label id="c-lat-l">${t("ctl.lat")} ${fmt(state2.lat)}\xB0</label>
         <button class="nudge" data-t="c-lat" data-d="-0.1" style="padding:2px 6px">\u2212</button>
         <input id="c-lat" type="range" min="-66" max="66" step="0.1" value="${state2.lat}">
         <button class="nudge" data-t="c-lat" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
-      <div class="row"><label id="c-lon-l">${t("ctl.lon")} ${state2.lon}\xB0</label>
+      <div class="row"><label id="c-lon-l">${t("ctl.lon")} ${fmt(state2.lon)}\xB0</label>
         <button class="nudge" data-t="c-lon" data-d="-0.1" style="padding:2px 6px">\u2212</button>
         <input id="c-lon" type="range" min="-180" max="180" step="0.1" value="${state2.lon}">
         <button class="nudge" data-t="c-lon" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
@@ -34091,9 +34092,9 @@
     const lonSlider = document.getElementById("c-lon");
     const lonVal = document.getElementById("c-lon-l");
     if (latSlider) latSlider.value = g.midLat;
-    if (latVal) latVal.textContent = "\u7EAC\u5EA6 " + g.midLat.toFixed(1) + "\xB0";
+    if (latVal) latVal.textContent = t("ctl.lat") + " " + g.midLat.toFixed(1) + "\xB0";
     if (lonSlider) lonSlider.value = g.midLon;
-    if (lonVal) lonVal.textContent = "\u7ECF\u5EA6 " + g.midLon.toFixed(1) + "\xB0";
+    if (lonVal) lonVal.textContent = t("ctl.lon") + " " + g.midLon.toFixed(1) + "\xB0";
     updateSun();
     refreshDaylight(three_module_exports);
     editor.fitToBoundary();

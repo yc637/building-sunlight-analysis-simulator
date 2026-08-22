@@ -11,13 +11,14 @@ export function initControls({ container, state, onChange }) {
   let season = null;
   const $ = (id) => container.querySelector(id);
 
+  const fmt = (v) => String(Math.round(v * 100) / 100); // 去浮点噪声，最多 2 位小数
   function render() {
     container.innerHTML = `
-      <div class="row"><label id="c-lat-l">${t('ctl.lat')} ${state.lat}°</label>
+      <div class="row"><label id="c-lat-l">${t('ctl.lat')} ${fmt(state.lat)}°</label>
         <button class="nudge" data-t="c-lat" data-d="-0.1" style="padding:2px 6px">−</button>
         <input id="c-lat" type="range" min="-66" max="66" step="0.1" value="${state.lat}">
         <button class="nudge" data-t="c-lat" data-d="0.1" style="padding:2px 6px">＋</button></div>
-      <div class="row"><label id="c-lon-l">${t('ctl.lon')} ${state.lon}°</label>
+      <div class="row"><label id="c-lon-l">${t('ctl.lon')} ${fmt(state.lon)}°</label>
         <button class="nudge" data-t="c-lon" data-d="-0.1" style="padding:2px 6px">−</button>
         <input id="c-lon" type="range" min="-180" max="180" step="0.1" value="${state.lon}">
         <button class="nudge" data-t="c-lon" data-d="0.1" style="padding:2px 6px">＋</button></div>
