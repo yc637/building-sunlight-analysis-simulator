@@ -1,0 +1,31 @@
+i18n.js
+  s_482eaa33a87939::t_9b46a5b1ea6729 8-9
+  s_482eaa33a87939::t_16cd066add33c2 54-55
+controls.js
+  s_482eaa33a87939::t_fe580eaf44d85b 32
+bundle.js
+  s_482eaa33a87939::t_4416a84d48986b 33198,33849
+  s_482eaa33a87939::t_b3a7e1eae0cb43 31786-31790,31891-31895,32594-32597,33823,33825-33827,34448,34451
+scene.js
+  s_482eaa33a87939::t_ce6c4fb82a9718 308
+  s_482eaa33a87939::t_bd72e067c6d21e 879,885
+  s_482eaa33a87939::t_52a83d84651660 284,286-288
+editor2d.js
+  s_482eaa33a87939::t_a1b640ca0682b9 374-377
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "19a8b3535520f33928d66105b64074dddf640b1e",
+  "prompts": {},
+  "sessions": {
+    "s_482eaa33a87939": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "affe5e7a-7dbe-48c8-87de-f5a115e8e50b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yc637 <yc637@aliyun.com>"
+    }
+  }
+}
