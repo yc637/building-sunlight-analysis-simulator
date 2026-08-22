@@ -8,7 +8,7 @@ import { refreshFloorColors } from './daylight.js';
 import { initLists } from './lists.js';
 import { geoPointsToWorld, serializeState, deserializeState, rotateFootprint } from './viewport.js';
 import { alertModal } from './modal.js';
-import { t, getLang, setLang, toggleLang, onLangChange, applyStatic } from './i18n.js';
+import { t, getLang, setLang, toggleLang, onLangChange, applyStatic, fmtTime } from './i18n.js';
 import { analyzeSunlightProgressive, southFaceIndex, nearestEdge } from './sunlight.js';
 
 export const state = {
@@ -305,7 +305,7 @@ function loop() {
     const slider = document.getElementById('c-time');
     if (slider) { slider.value = state.time; }
     const label = document.getElementById('c-time-l');
-    if (label) label.textContent = t('ctl.time') + ' ' + state.time.toFixed(1) + 'h';
+    if (label) label.textContent = t('ctl.time') + ' ' + fmtTime(state.time);
     updateSun();
     onFloorsDirty();
   }

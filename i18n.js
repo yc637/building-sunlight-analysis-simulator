@@ -94,6 +94,13 @@ let lang = 'zh';
 try { const s = localStorage.getItem('daylight-lang'); if (s === 'zh' || s === 'en') lang = s; } catch (e) {}
 const subs = [];
 
+// 小时(浮点) → HH:MM，如 12.5 → "12:30"
+export function fmtTime(v) {
+  const m = Math.round(v * 60);
+  const hh = Math.floor(m / 60), mm = ((m % 60) + 60) % 60;
+  return hh + ':' + String(mm).padStart(2, '0');
+}
+
 export function t(key, ...args) {
   const v = (DICT[lang] && DICT[lang][key]) ?? (DICT.zh[key]);
   return typeof v === 'function' ? v(...args) : (v ?? key);

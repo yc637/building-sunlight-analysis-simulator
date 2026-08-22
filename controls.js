@@ -1,4 +1,4 @@
-import { t, onLangChange } from './i18n.js';
+import { t, onLangChange, fmtTime } from './i18n.js';
 
 export function dateToDayOfYear(year, month, day) {
   const start = Date.UTC(year, 0, 1);
@@ -29,7 +29,7 @@ export function initControls({ container, state, onChange }) {
         <button id="c-equinox" style="flex:1;min-width:0;padding:4px 2px;font-size:11px;white-space:nowrap;height:26px">${t('ctl.equinox')}</button>
         <button id="c-summer" style="flex:1;min-width:0;padding:4px 2px;font-size:11px;white-space:nowrap;height:26px">${t('ctl.summer')}</button>
       </div>
-      <div class="row"><label id="c-time-l">${t('ctl.time')} ${fmt(state.time)}h</label>
+      <div class="row"><label id="c-time-l">${t('ctl.time')} ${fmtTime(state.time)}</label>
         <button class="nudge" data-t="c-time" data-d="-0.1" style="padding:2px 6px">−</button>
         <input id="c-time" type="range" min="0" max="24" step="0.1" value="${state.time}">
         <button class="nudge" data-t="c-time" data-d="0.1" style="padding:2px 6px">＋</button></div>
@@ -67,7 +67,7 @@ export function initControls({ container, state, onChange }) {
     $('#c-lat').oninput = (e) => { state.lat = +e.target.value; $('#c-lat-l').textContent = t('ctl.lat') + ' ' + e.target.value + '°'; onChange(); };
     $('#c-lon').oninput = (e) => { state.lon = +e.target.value; state.tzMeridian = Math.round(state.lon / 15) * 15; $('#c-lon-l').textContent = t('ctl.lon') + ' ' + e.target.value + '°'; onChange(); };
     $('#c-date').oninput = () => { curDate = $('#c-date').value; syncDate(); clearSeason(); onChange(); };
-    $('#c-time').oninput = (e) => { state.time = +e.target.value; $('#c-time-l').textContent = t('ctl.time') + ' ' + e.target.value + 'h'; onChange(); };
+    $('#c-time').oninput = (e) => { state.time = +e.target.value; $('#c-time-l').textContent = t('ctl.time') + ' ' + fmtTime(+e.target.value); onChange(); };
     $('#c-winter').onclick = () => { setDate('2026-12-21'); setSeason('c-winter'); };
     $('#c-equinox').onclick = () => { setDate('2026-03-21'); setSeason('c-equinox'); };
     $('#c-summer').onclick = () => { setDate('2026-06-21'); setSeason('c-summer'); };

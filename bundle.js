@@ -31981,6 +31981,11 @@
   } catch (e) {
   }
   var subs = [];
+  function fmtTime(v) {
+    const m = Math.round(v * 60);
+    const hh = Math.floor(m / 60), mm = (m % 60 + 60) % 60;
+    return hh + ":" + String(mm).padStart(2, "0");
+  }
   function t(key, ...args) {
     const v = (DICT[lang] && DICT[lang][key]) ?? DICT.zh[key];
     return typeof v === "function" ? v(...args) : v ?? key;
@@ -33195,7 +33200,7 @@
         <button id="c-equinox" style="flex:1;min-width:0;padding:4px 2px;font-size:11px;white-space:nowrap;height:26px">${t("ctl.equinox")}</button>
         <button id="c-summer" style="flex:1;min-width:0;padding:4px 2px;font-size:11px;white-space:nowrap;height:26px">${t("ctl.summer")}</button>
       </div>
-      <div class="row"><label id="c-time-l">${t("ctl.time")} ${fmt(state2.time)}h</label>
+      <div class="row"><label id="c-time-l">${t("ctl.time")} ${fmtTime(state2.time)}</label>
         <button class="nudge" data-t="c-time" data-d="-0.1" style="padding:2px 6px">\u2212</button>
         <input id="c-time" type="range" min="0" max="24" step="0.1" value="${state2.time}">
         <button class="nudge" data-t="c-time" data-d="0.1" style="padding:2px 6px">\uFF0B</button></div>
@@ -33253,7 +33258,7 @@
       };
       $("#c-time").oninput = (e) => {
         state2.time = +e.target.value;
-        $("#c-time-l").textContent = t("ctl.time") + " " + e.target.value + "h";
+        $("#c-time-l").textContent = t("ctl.time") + " " + fmtTime(+e.target.value);
         onChange();
       };
       $("#c-winter").onclick = () => {
@@ -33846,7 +33851,7 @@
         slider.value = state.time;
       }
       const label = document.getElementById("c-time-l");
-      if (label) label.textContent = t("ctl.time") + " " + state.time.toFixed(1) + "h";
+      if (label) label.textContent = t("ctl.time") + " " + fmtTime(state.time);
       updateSun();
       onFloorsDirty();
     }
