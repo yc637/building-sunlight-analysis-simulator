@@ -88,6 +88,7 @@ export function updateBoundary3d(THREE) {
     new THREE.LineBasicMaterial({ color: 0xd32f2f, transparent: true, opacity: 0.9 })
   );
   boundaryGroup.add(line);
+  fitGroundAndShadow();   // 范围变化 → 绿地/阴影自适应
 }
 
 const SUN_DIST = 400;
@@ -219,6 +220,25 @@ export function updateUnderlay3d(THREE) {
   scene.add(underlay);
 }
 
+// 内容最大半径（楼/墙/范围到原点的最大坐标绝对值）
+function contentExtent() {
+  let r = 100;
+  const add = (x, z) => { r = Math.max(r, Math.abs(x), Math.abs(z)); };
+  for (const b of state.buildings) for (const p of rotateFootprint(b.footprint, b.rotation || 0)) add(p[0], p[1]);
+  for (const w of state.walls) for (const p of w.path) add(p[0], p[1]);
+  if (state.boundaryPoly) for (const p of state.boundaryPoly) add(p[0], p[1]);
+  return r;
+}
+// 绿地 + 阴影相机自适应内容，避免建筑超出地面/阴影范围
+function fitGroundAndShadow() {
+  const r = contentExtent() + 50;
+  const size = Math.max(1000, r * 2);
+  ground.scale.set(size / 1000, size / 1000, 1);
+  sc.left = -r; sc.right = r; sc.top = r; sc.bottom = -r;
+  sc.far = Math.max(1000, r * 3);
+  sc.updateProjectionMatrix();
+}
+
 export function rebuildWorld(THREE) {
   for (const c of [...worldGroup.children]) {
     worldGroup.remove(c);
@@ -232,6 +252,7 @@ export function rebuildWorld(THREE) {
   for (const w of state.walls) {
     for (const m of buildWallMeshes(w, THREE)) worldGroup.add(m);
   }
+  fitGroundAndShadow();
 }
 
 export function refreshDaylight(THREE) {

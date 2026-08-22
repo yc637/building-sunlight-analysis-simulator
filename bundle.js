@@ -33616,6 +33616,7 @@
       new THREE.LineBasicMaterial({ color: 13840175, transparent: true, opacity: 0.9 })
     );
     boundaryGroup.add(line);
+    fitGroundAndShadow();
   }
   var SUN_DIST = 400;
   var sunRay = null;
@@ -33754,6 +33755,27 @@
     underlay.renderOrder = 5;
     scene.add(underlay);
   }
+  function contentExtent() {
+    let r = 100;
+    const add = (x, z) => {
+      r = Math.max(r, Math.abs(x), Math.abs(z));
+    };
+    for (const b of state.buildings) for (const p of rotateFootprint(b.footprint, b.rotation || 0)) add(p[0], p[1]);
+    for (const w of state.walls) for (const p of w.path) add(p[0], p[1]);
+    if (state.boundaryPoly) for (const p of state.boundaryPoly) add(p[0], p[1]);
+    return r;
+  }
+  function fitGroundAndShadow() {
+    const r = contentExtent() + 50;
+    const size = Math.max(1e3, r * 2);
+    ground.scale.set(size / 1e3, size / 1e3, 1);
+    sc.left = -r;
+    sc.right = r;
+    sc.top = r;
+    sc.bottom = -r;
+    sc.far = Math.max(1e3, r * 3);
+    sc.updateProjectionMatrix();
+  }
   function rebuildWorld(THREE) {
     for (const c of [...worldGroup.children]) {
       worldGroup.remove(c);
@@ -33767,6 +33789,7 @@
     for (const w of state.walls) {
       for (const m of buildWallMeshes(w, THREE)) worldGroup.add(m);
     }
+    fitGroundAndShadow();
   }
   function refreshDaylight(THREE) {
     const { dir, altitude } = sunPosition(state);
